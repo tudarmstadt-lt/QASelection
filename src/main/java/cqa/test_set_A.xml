@@ -1,0 +1,96 @@
+<xml version="1.0">
+
+	<Thread THREAD_SEQUENCE="Q1_R1">
+		<RelQuestion RELQ_ID="Q1_R1" RELQ_CATEGORY="Qatar Living Lounge" RELQ_DATE="2010-08-27 01:38:59" RELQ_USERID="U1" RELQ_USERNAME="sognabodl">
+			<RelQSubject>massage oil</RelQSubject>
+			<RelQBody>is there any place i can find scented massage oils in qatar?</RelQBody>
+		</RelQuestion>
+
+		<RelComment RELC_ID="Q1_R1_C1" RELC_DATE="2010-08-27 01:40:05" RELC_USERID="U2" RELC_USERNAME="anonymous" RELC_RELEVANCE2RELQ="Good">
+			<RelCText>Yes. It is right behind Kahrama in the National area.</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R1_C2" RELC_DATE="2010-08-27 01:42:59" RELC_USERID="U1" RELC_USERNAME="sognabodl" RELC_RELEVANCE2RELQ="Bad">
+			<RelCText>whats the name of the shop?</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R1_C3" RELC_DATE="2010-08-27 01:44:09" RELC_USERID="U2" RELC_USERNAME="anonymous" RELC_RELEVANCE2RELQ="Good">
+			<RelCText>It's called Naseem Al-Nadir. Right next to the Smartlink shop. You'll find the chinese salesgirls at affordable prices there.</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R1_C4" RELC_DATE="2010-08-27 01:58:39" RELC_USERID="U1" RELC_USERNAME="sognabodl" RELC_RELEVANCE2RELQ="Bad">
+			<RelCText>dont want girls;want oil</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R1_C5" RELC_DATE="2010-08-27 01:59:55" RELC_USERID="U2" RELC_USERNAME="anonymous" RELC_RELEVANCE2RELQ="Good">
+			<RelCText>Try Both ;) I'am just trying to be helpful. On a serious note - Please go there. you'll find what you are looking for.</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R1_C6" RELC_DATE="2010-08-27 02:02:53" RELC_USERID="U3" RELC_USERNAME="lawa" RELC_RELEVANCE2RELQ="Bad">
+			<RelCText>you mean oil and filter both</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R1_C7" RELC_DATE="2010-08-27 02:04:29" RELC_USERID="U2" RELC_USERNAME="anonymous" RELC_RELEVANCE2RELQ="Bad">
+			<RelCText>Yes Lawa...you couldn't be more right LOL</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R1_C8" RELC_DATE="2010-08-27 02:08:19" RELC_USERID="U2" RELC_USERNAME="anonymous" RELC_RELEVANCE2RELQ="Bad">
+			<RelCText>What they offer?</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R1_C9" RELC_DATE="2010-08-27 02:08:39" RELC_USERID="U4" RELC_USERNAME="Swine Flu" RELC_RELEVANCE2RELQ="Bad">
+			<RelCText>FU did u try with that salesgirl ?</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R1_C10" RELC_DATE="2010-08-27 02:10:33" RELC_USERID="U2" RELC_USERNAME="anonymous" RELC_RELEVANCE2RELQ="Bad">
+			<RelCText>Swine - No I don't try with salesgirls. My taste is classy ;)</RelCText>
+		</RelComment>
+	</Thread>
+
+	<Thread THREAD_SEQUENCE="Q1_R6">
+		<RelQuestion RELQ_ID="Q1_R6" RELQ_CATEGORY="Advice and Help" RELQ_DATE="2010-09-17 09:30:26" RELQ_USERID="U5" RELQ_USERNAME="ihthysham">
+			<RelQSubject>Philipino Massage center</RelQSubject>
+			<RelQBody>Hi;Can any one tell me a place where i can have a good massage drom philipinies????? yesterday i had a massage in Bio-Bil they charged me 300qr for 01 hour bt it is totally waste... pls advice me if theres any philipinos....</RelQBody>
+		</RelQuestion>
+
+		<RelComment RELC_ID="Q1_R6_C1" RELC_DATE="2010-09-17 09:58:22" RELC_USERID="U6" RELC_USERNAME="t_coffee_or_me" RELC_RELEVANCE2RELQ="Bad">
+			<RelCText>Most massages in Qatar are a waste of money. All they do is just rub some oil. No body does deep tissue massage here.</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R6_C2" RELC_DATE="2010-09-17 10:09:59" RELC_USERID="U7" RELC_USERNAME="betty boop" RELC_RELEVANCE2RELQ="PotentiallyUseful">
+			<RelCText>my masseuse is very good. calling her from to time for home service. currently in the philippines for a month vacation; i guess. =( she is the best in aromatherapy massage.</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R6_C3" RELC_DATE="2010-09-17 10:45:46" RELC_USERID="U8" RELC_USERNAME="asif_khan" RELC_RELEVANCE2RELQ="Good">
+			<RelCText>there is a massage center near mall roundabout in hilal opp. to woqood petrol station</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R6_C4" RELC_DATE="2010-09-17 11:04:39" RELC_USERID="U9" RELC_USERNAME="Jhong_C" RELC_RELEVANCE2RELQ="Good">
+			<RelCText>Try Magic Touch in Abu Hamour (beside Abu Hamour Petrol Stn)it will just cost you 60QR per hour and I've seen a lot of Qataris as their customers.</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R6_C5" RELC_DATE="2010-09-17 11:11:55" RELC_USERID="U10" RELC_USERNAME="Alumnar" RELC_RELEVANCE2RELQ="Bad">
+			<RelCText>Can anybody recommend a good place for head massages? I am constantly getting migranes and would like a head massage after the medication has done its job as I am left very drained. Thank you :)</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R6_C6" RELC_DATE="2010-09-17 12:36:28" RELC_USERID="U11" RELC_USERNAME="roy_dig" RELC_RELEVANCE2RELQ="PotentiallyUseful">
+			<RelCText>call them they are good 44410410.</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R6_C7" RELC_DATE="2010-09-17 12:40:08" RELC_USERID="U10" RELC_USERNAME="Alumnar" RELC_RELEVANCE2RELQ="Bad">
+			<RelCText>Hi Roy; what place is the contact number for that you posted?</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R6_C8" RELC_DATE="2010-09-17 12:44:02" RELC_USERID="U11" RELC_USERNAME="roy_dig" RELC_RELEVANCE2RELQ="Bad">
+			<RelCText>I dont know the name; you can call them. Do it fast; they have sooooo many reservations ;)</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R6_C9" RELC_DATE="2010-09-17 12:47:40" RELC_USERID="U10" RELC_USERNAME="Alumnar" RELC_RELEVANCE2RELQ="Bad">
+			<RelCText>Roy; thanks; but is it a beauty salon or what? Do you at least know the location?</RelCText>
+		</RelComment>
+
+		<RelComment RELC_ID="Q1_R6_C10" RELC_DATE="2010-09-27 16:25:30" RELC_USERID="U12" RELC_USERNAME="Spike80" RELC_RELEVANCE2RELQ="Good">
+			<RelCText>"The BEST MASSAGE in Doha ""VALUE FOR MONEY"" from my opinion is @ Merzam Residence;(cream color building with light blue glass window); opposite of The Center (Mega Mart)Bin Mahmood. Price is very reasonable; QR 150 for one hour. Therapist is from Bali island and he was working at Ritz-Carlton Hotel in Dubai. Phone no: 44274037. www.merzamhotels.com"</RelCText>
+		</RelComment>
+	</Thread>
+</xml>
