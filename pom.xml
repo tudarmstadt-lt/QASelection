@@ -3,4 +3,11 @@
   <groupId>cqa</groupId>
   <artifactId>cqa</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+  	<dependency>
+    	<groupId>info.debatty</groupId>
+    	<artifactId>java-string-similarity</artifactId>
+    	<version>RELEASE</version>
+	</dependency>
+  </dependencies>
 </project>
