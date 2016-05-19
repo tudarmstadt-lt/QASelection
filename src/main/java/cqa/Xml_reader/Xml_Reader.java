@@ -26,7 +26,7 @@ public class Xml_Reader                    // File for reading XML files
 {
 	public static void main(String args[])    
 	{
-		File inputFile = new File("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/CQA_Updated/data/semeval2016-task3-cqa-ql-traindev-v3.2/v3.2/train/SemEval2016-Task3-CQA-QL-train-part1-subtaskA.xml");
+		File inputFile = new File("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/CQA_Updated/data/semeval2016_task3_tests/SemEval2016_task3_test/English/SemEval2016-Task3-CQA-QL-test-subtaskA.xml");
 		SAXReader reader = new SAXReader();
 		try {
 			Document document = reader.read(inputFile);
@@ -34,7 +34,7 @@ public class Xml_Reader                    // File for reading XML files
 			//System.out.println(nodes.size());
 			PrintWriter writer = null;
 			try {
-				writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/info/debatty/java/stringsimilarity/examples/parsed_file.txt", false)));
+				writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/parsed_file.txt", false)));
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
