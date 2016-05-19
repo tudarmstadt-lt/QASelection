@@ -34,26 +34,17 @@ public class Similarity_feature_generator         //File generating various stri
 		File file = new File("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/parsed_file.txt");
 		BufferedReader reader = null;
 		PrintWriter writer = null;
+		PrintWriter writer_2 = null;
 		int q_id_rank = 0;
 		try {
 			writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/RankLib_test_file.txt", false)));
-			
+			writer_2 = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/SVM_test_file.txt", false)));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
 			reader = new BufferedReader(new FileReader(file));
-			NGram ngram = new NGram(3);
-			Cosine cos = new Cosine(3);
-			Jaccard j2 = new Jaccard(3);
-			JaroWinkler jw = new JaroWinkler();
-			Levenshtein levenshtein = new Levenshtein();
-			Damerau damerau = new Damerau();
-			NormalizedLevenshtein l = new NormalizedLevenshtein();
-			LongestCommonSubsequence lcs = new LongestCommonSubsequence();
-			SorensenDice sd = new SorensenDice(3);
-			QGram dig = new QGram(3);
 			try {
 				String q_id = reader.readLine();
 				do
@@ -68,18 +59,6 @@ public class Similarity_feature_generator         //File generating various stri
 						String label = splited[1];
 						String comment = reader.readLine();
 						System.out.println(c_id);
-						//System.out.println(question);
-						//System.out.println(comment);
-						System.out.println("n-gram score: "+ngram.distance(question, comment));
-						System.out.println("cosine score: "+cos.similarity(question, comment));
-						System.out.println("jaccard score: "+j2.similarity(question, comment));
-						System.out.println("levenshtein score: "+levenshtein.distance(question, comment));
-						System.out.println("jaro-wrinkler score: "+jw.similarity(question, comment));
-						System.out.println("Damerau score: "+damerau.distance(question, comment));
-						System.out.println("LCS score: "+lcs.distance(question, comment));
-						System.out.println("Normalized Levenshtein score: "+l.distance(question, comment));
-						System.out.println("q-gram score: "+dig.distance(question, comment));
-						System.out.println("Sorensen score: "+sd.similarity(question, comment));
 						double f_1 = ngram(question, comment, 3);
 						double f_2 = cosine(question, comment, 3);
 						double f_3 = Jaccard(question, comment, 3);
@@ -91,12 +70,13 @@ public class Similarity_feature_generator         //File generating various stri
 						double f_9 = NormalizedLevenshtein(question, comment);
 						double f_10 = LCS(question, comment);
 						writer.println(get_Label_value(label)+" "+"qid:"+q_id_rank+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" 5:"+f_5+" 6:"+f_6+" 7:"+f_7+" 8:"+f_8+" 9:"+f_9+" 10:"+f_10+" # "+c_id);
-						
+						writer_2.println(get_Label_value(label)+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" 5:"+f_5+" 6:"+f_6+" 7:"+f_7+" 8:"+f_8+" 9:"+f_9+" 10:"+f_10);
 					}
 					System.out.println("----------------------------------------");
 				}
 				while((q_id = reader.readLine())!=null);
 				writer.close();
+				writer_2.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
