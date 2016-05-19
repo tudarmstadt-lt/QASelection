@@ -29,5 +29,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/resources/lib/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/resources/lib/jaxen-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/resources/lib/RankLib-2.1-patched.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

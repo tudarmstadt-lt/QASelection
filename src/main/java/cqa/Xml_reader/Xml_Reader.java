@@ -26,7 +26,7 @@ public class Xml_Reader                    // File for reading XML files
 {
 	public static void main(String args[])    
 	{
-		File inputFile = new File("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/test_set_A.xml");
+		File inputFile = new File("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/CQA_Updated/data/semeval2016-task3-cqa-ql-traindev-v3.2/v3.2/train/SemEval2016-Task3-CQA-QL-train-part1-subtaskA.xml");
 		SAXReader reader = new SAXReader();
 		try {
 			Document document = reader.read(inputFile);
@@ -55,9 +55,10 @@ public class Xml_Reader                    // File for reading XML files
 			    {
 			    	l = comment.get(j).selectSingleNode("RelCText").getText().trim().replaceAll("\\s+", " ");
 			    	String c_id = comment.get(j).valueOf("@RELC_ID");
+			    	String label = comment.get(j).valueOf("@RELC_RELEVANCE2RELQ");
 			    	//System.out.println(l);
 			    	//System.out.println("-----------------------------------");
-			    	writer.println(c_id);
+			    	writer.println(c_id+" "+label);
 			    	writer.println(l);
 			    }
 			   
