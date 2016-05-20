@@ -1,4 +1,4 @@
-package cqa.Feature_files;
+package cqa.Feature_files.Java_files;
 
 
 
@@ -29,20 +29,18 @@ import info.debatty.java.stringsimilarity.WeightedLevenshtein;
 
 public class Similarity_feature_generator         //File generating various string features
 {
+	static double f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, f_10;
 	public static void main(String[] args)
 	{
-		File file = new File("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/parsed_file.txt");
+		File file = new File("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Xml_reader/parsed_file.txt");
 		BufferedReader reader = null;
 		PrintWriter writer = null;
-		PrintWriter writer_2 = null;
-		int q_id_rank = 0;
 		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/RankLib_test_file.txt", false)));
-			writer_2 = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/SVM_test_file.txt", false)));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/Data_format_files/SVM/Binary/SVM_file_binary.txt", false)));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		int q_id_rank = 0;
 		try {
 			reader = new BufferedReader(new FileReader(file));
 			try {
@@ -58,34 +56,39 @@ public class Similarity_feature_generator         //File generating various stri
 						String c_id = splited[0];
 						String label = splited[1];
 						String comment = reader.readLine();
-						System.out.println(c_id);
-						double f_1 = ngram(question, comment, 3);
-						double f_2 = cosine(question, comment, 3);
-						double f_3 = Jaccard(question, comment, 3);
-						double f_4 = QGram(question, comment, 3);
-						double f_5 = Sorensen(question, comment, 3);
-						double f_6 = JaroWinkler(question, comment);
-						double f_7 = Damerau(question, comment);
-						double f_8 = Levenshtein(question, comment);
-						double f_9 = NormalizedLevenshtein(question, comment);
-						double f_10 = LCS(question, comment);
-						writer.println(get_Label_value(label)+" "+"qid:"+q_id_rank+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" 5:"+f_5+" 6:"+f_6+" 7:"+f_7+" 8:"+f_8+" 9:"+f_9+" 10:"+f_10+" # "+c_id);
-						writer_2.println(get_Label_value(label)+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" 5:"+f_5+" 6:"+f_6+" 7:"+f_7+" 8:"+f_8+" 9:"+f_9+" 10:"+f_10);
-					}
-					System.out.println("----------------------------------------");
+						 f_1 = ngram(question, comment, 3);
+						 f_2 = cosine(question, comment, 3);
+						 f_3 = Jaccard(question, comment, 3);
+						 f_4 = QGram(question, comment, 3);
+						 f_5 = Sorensen(question, comment, 3);
+						 f_6 = JaroWinkler(question, comment);
+						 f_7 = Damerau(question, comment);
+						 f_8 = Levenshtein(question, comment);
+						 f_9 = NormalizedLevenshtein(question, comment);
+						 f_10 = LCS(question, comment);
+						 SVM_writer(writer, label, 1);
+					}					
 				}
 				while((q_id = reader.readLine())!=null);
 				writer.close();
-				writer_2.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
+	}
+	public static void RankLib_writer(PrintWriter writer, String label, int q_id_rank, String c_id)
+	{
+		writer.println(get_Label_value(label)+" "+"qid:"+q_id_rank+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" 5:"+f_5+" 6:"+f_6+" 7:"+f_7+" 8:"+f_8+" 9:"+f_9+" 10:"+f_10+" # "+c_id);
+	}
+	public static void SVM_writer(PrintWriter writer, String label, int flag)
+	{
+		if(flag == 0)
+			writer.println(get_Label_value(label)+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" 5:"+f_5+" 6:"+f_6+" 7:"+f_7+" 8:"+f_8+" 9:"+f_9+" 10:"+f_10);
+		else
+			writer.println(binary_class(label)+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" 5:"+f_5+" 6:"+f_6+" 7:"+f_7+" 8:"+f_8+" 9:"+f_9+" 10:"+f_10);
 	}
 	public static int get_Label_value(String s)
 	{
@@ -99,6 +102,17 @@ public class Similarity_feature_generator         //File generating various stri
 		}
 		return 3;
 	}
+	public static int binary_class(String s)
+	{
+		if(s.equals("Good"))
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
 	public static double ngram(String s1, String s2, int n)
 	{
 		NGram ngram = new NGram(n);
@@ -109,7 +123,6 @@ public class Similarity_feature_generator         //File generating various stri
 		Cosine cos = new Cosine(n);
 		if(Double.isNaN(cos.similarity(s1,s2)))
 		{
-			System.out.println("Nan");
 			return 0.0;
 		}
 		return cos.similarity(s1, s2);
