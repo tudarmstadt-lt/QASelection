@@ -26,38 +26,30 @@ public class Xml_Reader                    // File for reading XML files
 {
 	public static void main(String args[])    
 	{
-		File inputFile = new File("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/CQA_Updated/data/semeval2016_task3_tests/SemEval2016_task3_test/English/SemEval2016-Task3-CQA-QL-test-subtaskA.xml");
+		File inputFile = new File("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/CQA_Updated/data/semeval2016-task3-cqa-ql-traindev-v3.2/v3.2/train/SemEval2016-Task3-CQA-QL-train-part1-subtaskA.xml");
 		SAXReader reader = new SAXReader();
 		try {
 			Document document = reader.read(inputFile);
 			List<Node> nodes = document.selectNodes("xml/Thread");
-			//System.out.println(nodes.size());
 			PrintWriter writer = null;
 			try {
-				writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/parsed_file.txt", false)));
-				
+				writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Xml_reader/parsed_file.txt", false)));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			for(int i=0; i< nodes.size(); i++)
 			{
-				System.out.println("QUESTION:");
 				String l = nodes.get(i).selectSingleNode("RelQuestion/RelQBody").getText().trim().replaceAll("\\s+", " ");
 				String q_id = nodes.get(i).selectSingleNode("RelQuestion").valueOf("@RELQ_ID");
 				writer.println(q_id);
 				writer.println(l);
-				//System.out.println("-----------------------------------------------------------------");
-
-				System.out.println("COMMENTS");
+				
 			    List<Node> comment = nodes.get(i).selectNodes("RelComment");
 			    for(int j=0; j<comment.size(); j++)
 			    {
 			    	l = comment.get(j).selectSingleNode("RelCText").getText().trim().replaceAll("\\s+", " ");
 			    	String c_id = comment.get(j).valueOf("@RELC_ID");
 			    	String label = comment.get(j).valueOf("@RELC_RELEVANCE2RELQ");
-			    	//System.out.println(l);
-			    	//System.out.println("-----------------------------------");
 			    	writer.println(c_id+" "+label);
 			    	writer.println(l);
 			    }
@@ -65,7 +57,6 @@ public class Xml_Reader                    // File for reading XML files
 			}
 			writer.close();
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
