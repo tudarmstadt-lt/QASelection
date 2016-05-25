@@ -34,18 +34,28 @@ import org.dom4j.io.SAXReader;
 
 public class Thread_level 
 {
+	static int f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, f_10, f_11;
 	public static void main(String args[])
 	{
 		File file = new File("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Xml_reader/parsed_file.txt");
 		BufferedReader reader = null;
+		PrintWriter writer = null;
+		//Similarity_feature_generator gen = new Similarity_feature_generator();
+		try {
+			writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/Data_format_files/RankLib/RankLib_thread_level.txt", false)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		int q_id_rank = 0;
 		try {
 			reader = new BufferedReader(new FileReader(file));
 			try {
 				String q_id = reader.readLine();
-				get_users();
+				
 				do
 				{
 					String question = reader.readLine();
+					q_id_rank++;
 					for(int i=0; i<10; i++)
 					{
 						String str = reader.readLine();
@@ -53,24 +63,62 @@ public class Thread_level
 						String c_id = splited[0];
 						String label = splited[1];
 						String comment = reader.readLine();
-						//special_word_matcher("yes", comment);
-						//special_word_matcher("sure", comment);
-						//special_word_matcher("no", comment);
-						//special_word_matcher("neither", comment);
-						//special_word_matcher("okay", comment);
-						//special_character_matcher("@", comment);
-						special_character_matcher("?", comment);
-						//begin_matcher("yes", comment);
-						//length_matcher(comment);
-						
+						f_1 = URL_matcher(comment, c_id);
+						f_2 = email_matcher(comment, c_id);
+						f_3 = special_word_matcher("yes", comment);
+						f_4 = special_word_matcher("sure", comment);
+						f_5 = special_word_matcher("no", comment);
+						f_6 = special_word_matcher("neither", comment);
+						f_7 = special_word_matcher("ok", comment);
+						f_8 = special_character_matcher("@", comment);
+						f_9 = special_character_matcher("?", comment);
+						f_10 = begin_matcher("yes", comment);
+						f_11 = length_matcher(comment);
+						RankLib_writer(writer, label, q_id_rank, c_id);
+						//SVM_writer(writer, label, 1);
 					}					
 				}
 				while((q_id = reader.readLine())!=null);
+				writer.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		}
+	}
+	public static void RankLib_writer(PrintWriter writer, String label, int q_id_rank, String c_id)
+	{
+		writer.println(get_Label_value(label)+" "+"qid:"+q_id_rank+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" 5:"+f_5+" 6:"+f_6+" 7:"+f_7+" 8:"+f_8+" 9:"+f_9+" 10:"+f_10+" 11:"+f_11+" # "+c_id);
+	}
+	public static void SVM_writer(PrintWriter writer, String label, int flag)
+	{
+		if(flag == 0)
+			writer.println(get_Label_value(label)+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" 5:"+f_5+" 6:"+f_6+" 7:"+f_7+" 8:"+f_8+" 9:"+f_9+" 10:"+f_10);
+		else
+			writer.println(binary_class(label)+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" 5:"+f_5+" 6:"+f_6+" 7:"+f_7+" 8:"+f_8+" 9:"+f_9+" 10:"+f_10+" 11:"+f_11);
+	}
+	public static int get_Label_value(String s)
+	{
+		if(s.equals("Good"))
+		{
+			return 1;
+		}
+		else if(s.equals("PotentiallyUseful"))
+		{
+			return 2;
+		}
+		return 3;
+	}
+	public static int binary_class(String s)
+	{
+		if(s.equals("Good"))
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
 		}
 	}
 	public static int URL_matcher(String comment, String c_id)
@@ -80,8 +128,8 @@ public class Thread_level
         boolean result = m.find();
         if(result)
         {
-        	System.out.println(c_id);
-        	System.out.println(m.group());
+        	//System.out.println(c_id);
+        	//System.out.println(m.group());
         	return 1;
         }
         return 0;
@@ -92,8 +140,8 @@ public class Thread_level
         boolean result = m.find();
         if(result)
         {
-        	System.out.println(c_id);
-        	System.out.println(m.group());
+        	//System.out.println(c_id);
+        	//System.out.println(m.group());
         	return 1;
         }
         return 0;
@@ -105,7 +153,7 @@ public class Thread_level
 		{
 			if(words.equals(to_match))
 			{
-				System.out.println(comment);
+				//System.out.println(comment);
 				return 1;
 			}
 		}
@@ -115,7 +163,7 @@ public class Thread_level
 	{
 		if(comment.contains(to_match))
 		{
-			System.out.println(comment);
+			//System.out.println(comment);
 			return 1;
 		}
 			
@@ -124,9 +172,9 @@ public class Thread_level
 	public static int begin_matcher(String to_match, String comment)
 	{
 		String[] str = comment.replaceAll("[^a-zA-Z0-9 ]", "").toLowerCase().split("\\s+");
-		if(str[0].equals(to_match))
+		if(str.length > 0 && str[0].equals(to_match))
 		{
-			System.out.println(comment);
+			//System.out.println(comment);
 			return 1;
 		}
 		return 0;
@@ -138,48 +186,11 @@ public class Thread_level
 		{
 			if(words.length() > 15)
 			{
-				System.out.println(words);
+				//System.out.println(words);
 				return 1;
 			}
 		}
 		return 0;
 	}
-	public static void get_users()               
-    {
-		File inputFile = new File("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/CQA_Updated/data/semeval2016_task3_tests/SemEval2016_task3_test/English/SemEval2016-Task3-CQA-QL-test-subtaskA.xml");
-		SAXReader reader = new SAXReader();
-		PrintWriter writer = null;
-		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/Data_format_files/Thread_level/users_each_thread.txt", false)));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			Document document = reader.read(inputFile);
-			List<Node> nodes = document.selectNodes("xml/Thread");          //Get users involved in Question-comment thread
-	    	for(int i=0; i<nodes.size(); i++)
-	    	{
-	    		String q_id = nodes.get(i).selectSingleNode("RelQuestion").valueOf("@RELQ_ID");
-	    		String l = nodes.get(i).selectSingleNode("RelQuestion/RelQBody").getText().trim().replaceAll("\\s+", " ");
-	    		String user_name = nodes.get(i).selectSingleNode("RelQuestion").valueOf("@RELQ_USERNAME");
-	    		writer.println(q_id+" "+nodes.get(i).selectSingleNode("RelQuestion").valueOf("@RELQ_USERID")+" "+user_name);
-	    		writer.println(l);
-	    		List<Node> comment = nodes.get(i).selectNodes("RelComment");
-			    for(int j=0; j<comment.size(); j++)
-			    {
-			    	l = comment.get(j).selectSingleNode("RelCText").getText().trim().replaceAll("\\s+", " ");
-			    	String c_id = comment.get(j).valueOf("@RELC_ID");
-			    	String label = comment.get(j).valueOf("@RELC_RELEVANCE2RELQ");
-			    	String commenter_id = comment.get(j).valueOf("@RELC_USERID");
-			    	String commenter_name = comment.get(j).valueOf("@RELC_USERNAME");
-			    	writer.println(c_id+" "+commenter_id+" "+commenter_name+" "+label);
-			    	writer.println(l);
-			    }
-	    	}
-		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		writer.close();
-    }
+	
 }
