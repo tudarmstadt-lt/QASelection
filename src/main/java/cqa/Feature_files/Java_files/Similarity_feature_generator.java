@@ -36,7 +36,7 @@ public class Similarity_feature_generator         //File generating various stri
 		BufferedReader reader = null;
 		PrintWriter writer = null;
 		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/Data_format_files/SVM/Binary/SVM_file_binary.txt", false)));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/Data_format_files/RankLib/RankLib_file.txt", false)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -66,7 +66,7 @@ public class Similarity_feature_generator         //File generating various stri
 						 f_8 = Levenshtein(question, comment);
 						 f_9 = NormalizedLevenshtein(question, comment);
 						 f_10 = LCS(question, comment);
-						 SVM_writer(writer, label, 1);
+						 RankLib_writer(writer, label, q_id_rank, c_id);
 					}					
 				}
 				while((q_id = reader.readLine())!=null);
