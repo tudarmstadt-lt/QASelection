@@ -19,7 +19,7 @@ public class Thread_level_users
 		BufferedReader reader = null;
 		PrintWriter writer = null;
 		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/Data_format_files/RankLib/RankLib_thread_level_users.txt", false)));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/Data_format_files/SVM/Binary/SVM_thread_level_users.txt", false)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -60,12 +60,12 @@ public class Thread_level_users
 						}
 						String comment = reader.readLine();
 						f_1 = get_same(asker_id, commenter_id);
-						f_2 = get_length(comment);
-						f_3 = get_same_ack(asker_id, commenter_id, comment);
-						f_4 = get_same_que(asker_id, commenter_id, comment);
-						f_5 = get_same_imp(asker_id, commenter_id, comment);
-						RankLib_writer(writer, label, q_id_rank, c_id);
-						//SVM_writer(writer, label, 1);
+						//f_2 = get_length(comment);
+						f_2 = get_same_ack(asker_id, commenter_id, comment);
+						f_3 = get_same_que(asker_id, commenter_id, comment);
+						f_4 = get_same_imp(asker_id, commenter_id, comment);
+						//RankLib_writer(writer, label, q_id_rank, c_id);
+						SVM_writer(writer, label, 1);
 					}
 				}
 				while((str = reader.readLine())!=null);
@@ -79,14 +79,14 @@ public class Thread_level_users
 	}
 	public static void RankLib_writer(PrintWriter writer, String label, int q_id_rank, String c_id)
 	{
-		writer.println(get_Label_value(label)+" "+"qid:"+q_id_rank+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" 5:"+f_5+" # "+c_id);
+		writer.println(get_Label_value(label)+" "+"qid:"+q_id_rank+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" # "+c_id);
 	}
 	public static void SVM_writer(PrintWriter writer, String label, int flag)
 	{
 		if(flag == 0)
-			writer.println(get_Label_value(label)+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" 5:"+f_5);
+			writer.println(get_Label_value(label)+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4);
 		else
-			writer.println(binary_class(label)+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" 5:"+f_5);
+			writer.println(binary_class(label)+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4);
 	}
 	public static int get_Label_value(String s)
 	{

@@ -21,7 +21,7 @@ public class thread_level_proximity
 		PrintWriter writer = null;
 		
 		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/Data_format_files/RankLib/RankLib_thread_level_proximity.txt", false)));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/Data_format_files/SVM/Multiclass/SVM_thread_level_proximity.txt", false)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -134,8 +134,8 @@ public class thread_level_proximity
 					}
 				}
 			}
-			writer.println(thread.get_Label_value(arr3[i])+" "+"qid:"+q_id_rank+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" # "+arr1[i]);
-			//writer.println(thread.binary_class(arr3[i])+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4);
+			//writer.println(thread.get_Label_value(arr3[i])+" "+"qid:"+q_id_rank+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" # "+arr1[i]);
+			writer.println(thread.get_Label_value(arr3[i])+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4);
 			
 		}
 	}

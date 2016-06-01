@@ -1,7 +1,5 @@
 package cqa.Feature_files.Java_files;
 
-
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.BufferedReader;
@@ -12,6 +10,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import info.debatty.java.stringsimilarity.CharacterSubstitutionInterface;
 import info.debatty.java.stringsimilarity.Cosine;
@@ -27,16 +27,15 @@ import info.debatty.java.stringsimilarity.QGram;
 import info.debatty.java.stringsimilarity.SorensenDice;
 import info.debatty.java.stringsimilarity.WeightedLevenshtein;
 
-public class Similarity_feature_generator         //File generating various string features
+public class Similarity_normalizer         //File generating various string features
 {
-	static double f_1, f_2, f_3, f_4, f_5, f_6, f_7, f_8, f_9, f_10, f_11, f_12, f_13, f_14, f_15;
 	public static void main(String[] args)
 	{
 		File file = new File("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Xml_reader/parsed_file.txt");
 		BufferedReader reader = null;
 		PrintWriter writer = null;
 		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/Data_format_files/RankLib/RankLib_file.txt", false)));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/Data_format_files/SVM/Binary/SVM_file_binary.txt", false)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -47,6 +46,9 @@ public class Similarity_feature_generator         //File generating various stri
 				String q_id = reader.readLine();
 				do
 				{
+					double[][] arr = new double[15][10];
+					String[] labels = new String[10];
+					String[] cid = new String[10];
 					String question = reader.readLine();
 					q_id_rank++;
 					for(int i=0; i<10; i++)
@@ -54,26 +56,30 @@ public class Similarity_feature_generator         //File generating various stri
 						String str = reader.readLine();
 						String[] splited = str.split("\\s+");
 						String c_id = splited[0];
+						cid[i] = c_id;
 						String label = splited[1];
+						labels[i] = label;
 						String comment = reader.readLine();
-						 f_1 = ngram(question, comment, 2);
-						 f_2 = ngram(question, comment, 3);
-						 f_3 = cosine(question, comment, 2);
-						 f_4 = cosine(question, comment, 3);
-						 f_5 = Jaccard(question, comment, 2);
-						 f_6 = Jaccard(question, comment, 3);
-						 f_7 = QGram(question, comment, 2);
-						 f_8 = QGram(question, comment, 3);
-						 f_9 = Sorensen(question, comment, 2);
-						 f_10 = Sorensen(question, comment, 3);
-						 f_11 = JaroWinkler(question, comment);
-						 f_12 = Damerau(question, comment);
-						 f_13 = Levenshtein(question, comment);
-						 f_14 = NormalizedLevenshtein(question, comment);
-						 f_15 = LCS(question, comment);
-						 RankLib_writer(writer, label, q_id_rank, c_id);
-						 //SVM_writer(writer, label, 1);
-					}					
+						 arr[0][i] = ngram(question, comment, 2);
+						 arr[1][i] = ngram(question, comment, 3);
+						 arr[2][i] = cosine(question, comment, 2);
+						 arr[3][i] = cosine(question, comment, 3);
+						 arr[4][i] = Jaccard(question, comment, 2);
+						 arr[5][i] = Jaccard(question, comment, 3);
+						 arr[6][i] = QGram(question, comment, 2);
+						 arr[7][i] = QGram(question, comment, 3);
+						 arr[8][i] = Sorensen(question, comment, 2);
+						 arr[9][i] = Sorensen(question, comment, 3);
+						 arr[10][i] = JaroWinkler(question, comment);
+						 arr[11][i] = Damerau(question, comment);
+						 arr[12][i] = Levenshtein(question, comment);
+						 arr[13][i] = NormalizedLevenshtein(question, comment);
+						 arr[14][i] = LCS(question, comment);
+						 
+					}
+					normalize(arr,15);
+					//RankLib_writer(writer, labels, q_id_rank, cid, arr);
+					SVM_writer(writer, labels, 1, arr);
 				}
 				while((q_id = reader.readLine())!=null);
 				writer.close();
@@ -85,16 +91,29 @@ public class Similarity_feature_generator         //File generating various stri
 		}
 		
 	}
-	public static void RankLib_writer(PrintWriter writer, String label, int q_id_rank, String c_id)
+	public static void RankLib_writer(PrintWriter writer, String[] label, int q_id_rank, String[] c_id, double[][] arr)
 	{
-		writer.println(get_Label_value(label)+" "+"qid:"+q_id_rank+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" 5:"+f_5+" 6:"+f_6+" 7:"+f_7+" 8:"+f_8+" 9:"+f_9+" 10:"+f_10+" 11:"+f_11+" 12:"+f_12+" 13:"+f_13+" 14:"+f_14+" 15:"+f_15+" # "+c_id);
+		for(int i=0; i<10; i++)
+		{
+			writer.println(get_Label_value(label[i])+" "+"qid:"+q_id_rank+" 1:"+arr[0][i]+" 2:"+arr[1][i]+" 3:"+arr[2][i]+" 4:"+arr[3][i]+" 5:"+arr[4][i]+" 6:"+arr[5][i]+" 7:"+arr[6][i]+" 8:"+arr[7][i]+" 9:"+arr[8][i]+" 10:"+arr[9][i]+" 11:"+arr[10][i]+" 12:"+arr[11][i]+" 13:"+arr[12][i]+" 14:"+arr[13][i]+" 15:"+arr[14][i]+" # "+c_id[i]);
+		}
 	}
-	public static void SVM_writer(PrintWriter writer, String label, int flag)
+	public static void SVM_writer(PrintWriter writer, String[] label, int flag, double[][] arr)
 	{
 		if(flag == 0)
-			writer.println(get_Label_value(label)+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" 5:"+f_5+" 6:"+f_6+" 7:"+f_7+" 8:"+f_8+" 9:"+f_9+" 10:"+f_10);
+		{
+			for(int i=0; i<10; i++)
+			{
+				writer.println(get_Label_value(label[i])+" "+"1:"+arr[0][i]+" 2:"+arr[1][i]+" 3:"+arr[2][i]+" 4:"+arr[3][i]+" 5:"+arr[4][i]);
+			}
+		}
 		else
-			writer.println(binary_class(label)+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4+" 5:"+f_5+" 6:"+f_6+" 7:"+f_7+" 8:"+f_8+" 9:"+f_9+" 10:"+f_10+" 11:"+f_11+" 12:"+f_12+" 13:"+f_13+" 14:"+f_14+" 15:"+f_15);
+		{
+			for(int i=0; i<10; i++)
+			{
+				writer.println(binary_class(label[i])+" "+"1:"+arr[0][i]+" 2:"+arr[1][i]+" 3:"+arr[2][i]+" 4:"+arr[3][i]+" 5:"+arr[4][i]+" 6:"+arr[5][i]+" 7:"+arr[6][i]+" 8:"+arr[7][i]+" 9:"+arr[8][i]+" 10:"+arr[9][i]+" 11:"+arr[10][i]+" 12:"+arr[11][i]+" 13:"+arr[12][i]+" 14:"+arr[13][i]+" 15:"+arr[14][i]);
+			}
+		}
 	}
 	public static int get_Label_value(String s)
 	{
@@ -173,4 +192,23 @@ public class Similarity_feature_generator         //File generating various stri
 		LongestCommonSubsequence lcs = new LongestCommonSubsequence();
 		return lcs.distance(s1, s2);
 	}
+	public static void normalize(double[][] arr, int n)
+	{
+		for(int i=0; i<n; i++)
+		{
+			ArrayList<Double> d = new ArrayList<>();
+			for(int j=0; j<10; j++)
+			{
+				d.add(arr[i][j]);
+			}
+			double max = Collections.max(d);
+			double min = Collections.min(d);
+			for(int j=0; j<10; j++)
+			{
+				if((max - min)!=0)
+					arr[i][j] = (arr[i][j] - min)/ (max - min);
+			}
+		}
+	}
 }
+
