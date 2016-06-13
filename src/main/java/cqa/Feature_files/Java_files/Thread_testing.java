@@ -2,44 +2,23 @@ package cqa.Feature_files.Java_files;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.Node;
-import org.dom4j.XPath;
-import org.dom4j.io.SAXReader;
 
 public class Thread_testing
 {
 	public static void main(String args[])
 	{
-		File file = new File("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Xml_reader/parsed_file.txt");
+		File file = new File(args[0]);
 		BufferedReader reader = null;
 		PrintWriter writer = null;
 		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/Data_format_files/SVM/Binary/SVM_thread_level.txt", false)));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[1], false)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -75,9 +54,9 @@ public class Thread_testing
 						arr[4][i] = length_matcher(comment);
 						//arr[5][i] = punc_matcher(punc, comment);
 					}
-					normalize(arr,5);
-					//RankLib_writer(writer, labels, q_id_rank, cid, arr);
-					SVM_writer(writer, labels, 1, arr);
+
+					RankLib_writer(writer, labels, q_id_rank, cid, arr);
+					//SVM_writer(writer, labels, 1, arr);
 				}
 				while((q_id = reader.readLine())!=null);
 				writer.close();
@@ -101,14 +80,14 @@ public class Thread_testing
 		{
 			for(int i=0; i<10; i++)
 			{
-				writer.println(get_Label_value(label[i])+" "+" 1:"+arr[0][i]+" 2:"+arr[1][i]+" 3:"+arr[2][i]+" 4:"+arr[3][i]+" 5:"+arr[4][i]);
+				writer.println(get_Label_value(label[i])+" "+"1:"+arr[0][i]+" 2:"+arr[1][i]+" 3:"+arr[2][i]+" 4:"+arr[3][i]+" 5:"+arr[4][i]);
 			}
 		}
 		else
 		{
 			for(int i=0; i<10; i++)
 			{
-				writer.println(binary_class(label[i])+" "+" 1:"+arr[0][i]+" 2:"+arr[1][i]+" 3:"+arr[2][i]+" 4:"+arr[3][i]+" 5:"+arr[4][i]);
+				writer.println(binary_class(label[i])+" "+"1:"+arr[0][i]+" 2:"+arr[1][i]+" 3:"+arr[2][i]+" 4:"+arr[3][i]+" 5:"+arr[4][i]);
 			}
 		}
 	}
@@ -202,23 +181,4 @@ public class Thread_testing
 	{
 		return comment.length();
 	}
-	public static void normalize(double[][] arr, int n)
-	{
-		for(int i=0; i<n; i++)
-		{
-			ArrayList<Double> d = new ArrayList<>();
-			for(int j=0; j<10; j++)
-			{
-				d.add(arr[i][j]);
-			}
-			double max = Collections.max(d);
-			double min = Collections.min(d);
-			for(int j=0; j<10; j++)
-			{
-				if((max - min)!=0)
-					arr[i][j] = (arr[i][j] - min)/ (max - min);
-			}
-		}
-	}
 }
-
