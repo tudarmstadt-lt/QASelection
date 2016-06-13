@@ -1,31 +1,33 @@
 package cqa.Writer;
-import cqa.Feature_files.Java_files.Similarity_feature_generator;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 public class Writer 
 {
+	static int oiso = 0;
+	static int zisz = 0;
+	static int oisz = 0;
+	static int ziso = 0;
+	static ArrayList<String>oisz_arr = new ArrayList<>();
+	static ArrayList<String>ziso_arr = new ArrayList<>();
 	public static void main(String args[])
 	{
 		PrintWriter writer = null;
 		BufferedReader reader = null;
 		BufferedReader reader_2 = null;
 		BufferedReader reader_3 = null;
-		File file = new File("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Xml_reader/parsed_file.txt");
-		File file_2 = new File("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/Data_format_files/RankLib/RankLib_test_file.score");
-		File file_3 = new File("/mnt/Titas/1_QA_MODEL/Tools/libsvm-3.21/java/output.txt");
+		File file = new File(args[0]);
+		File file_2 = new File(args[1]);
+		File file_3 = new File(args[2]);
 		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/CQA_Updated/Results/semeval2016_task3_submissions_and_score/SemEval2016_task3_submissions_and_scores/_scorer/results.txt", false)));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[3], false)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -46,14 +48,29 @@ public class Writer
 						String label = splited[1];
 						String comment = reader.readLine();
 						String score_line = reader_2.readLine();
+						//System.out.println(score_line);
 						splited = score_line.split("\\s+");
 						String score = splited[2];
-						String bin_class = get_bool(reader_3.readLine());
+						String l = reader_3.readLine();
+						String bin_class = get_class(l);
+						comp_class(label, Double.parseDouble(l), c_id);
 						writer.println(q_id+" "+c_id+" 0 "+score+" "+bin_class);
 					}
 				}
 				while((q_id = reader.readLine())!=null);
 				writer.close();
+				System.out.println("bad classified as bad: "+ zisz);
+				System.out.println("bad classified as good: "+ ziso);
+//				for(int i=0; i<ziso_arr.size(); i++)
+//				{
+//					System.out.println(ziso_arr.get(i));
+//				}
+				System.out.println("good classified as bad: "+ oisz);
+//				for(int i=0; i<oisz_arr.size(); i++)
+//				{
+//					System.out.println(oisz_arr.get(i));
+//				}
+				System.out.println("good classified as good: "+ oiso);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -61,10 +78,52 @@ public class Writer
 			e.printStackTrace();
 		}
 	}
+	public static void comp_class(String gold, double predict, String c_id)
+	{
+		if(predict == 0.0)
+		{
+			if(binary_class(gold) == 0.0)
+				zisz++;
+			else
+			{
+				oisz++;
+				oisz_arr.add(c_id);
+			}
+				
+		}
+		if(predict == 1.0)
+		{
+			if(binary_class(gold) == 1.0)
+				oiso++;
+			else
+			{
+				ziso++;
+				ziso_arr.add(c_id);
+			}
+		}
+	}
+	public static double binary_class(String s)
+	{
+		if(s.equals("Bad"))
+		{
+			return 0.0;
+		}
+		else
+		{
+			return 1.0;
+		}
+	}
 	public static String get_bool(String s)
 	{
-		if(s.equals("0.0"))
+		if(Double.parseDouble(s) == 0.0)
 			return "false";
 		return "true";
+	}
+	public static String get_class(String s)
+	{
+		if(Double.parseDouble(s) == 1.0)
+			return "true";
+		else
+			return "false";
 	}
 }
