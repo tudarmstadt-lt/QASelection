@@ -13,12 +13,12 @@ public class multiple_file_reader
 {
 	public static void main(String args[])
 	{
-		String SVM_dir = "/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/Data_format_files/SVM/Binary/";
-		String[] SVM_files_train = {SVM_dir+"SVM_file_binary.txt", SVM_dir+"SVM_thread_level.txt", SVM_dir+"SVM_thread_level_users.txt", SVM_dir+"SVM_thread_level_proximity.txt"};
-		String[] SVM_files_test = {SVM_dir+"SVM_test_file_binary.txt", SVM_dir+"SVM_thread_level_test.txt", SVM_dir+"SVM_thread_level_users_test.txt", SVM_dir+"SVM_thread_level_proximity_test.txt"};
-		String RankLib_dir = "/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/Data_format_files/RankLib/";
-		String[] RankLib_files_train = {RankLib_dir+"RankLib_file.txt", RankLib_dir+"RankLib_thread_level.txt", RankLib_dir+"RankLib_thread_level_users.txt", RankLib_dir+"RankLib_thread_level_proximity.txt"};
-		String[] RankLib_files_test = {RankLib_dir+"RankLib_test_file.txt", RankLib_dir+"RankLib_thread_level_test.txt", RankLib_dir+"RankLib_thread_level_users_test.txt", RankLib_dir+"RankLib_thread_level_proximity_test.txt"};
+		String SVM_dir = "/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/CQA_Updated/data/Data_format_files/SVM/Binary/";
+		String[] SVM_files_train = {SVM_dir+"SVM_file_binary.txt", SVM_dir+"SVM_thread_level.txt", SVM_dir+"SVM_temp.txt"};
+		String[] SVM_files_test = {SVM_dir+"SVM_test_file_binary.txt", SVM_dir+"SVM_thread_level_test.txt", SVM_dir+"SVM_temp_test.txt"};
+		String RankLib_dir = "/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/CQA_Updated/data/Data_format_files/RankLib/";
+		String[] RankLib_files_train = {RankLib_dir+"RankLib_file.txt", RankLib_dir+"RankLib_thread_level.txt", RankLib_dir+"RankLib_temp.txt"};
+		String[] RankLib_files_test = {RankLib_dir+"RankLib_test_file.txt", RankLib_dir+"RankLib_thread_level_test.txt", RankLib_dir+"RankLib_temp_test.txt"};
 		multireader(SVM_files_train, SVM_dir+"SVM_total.txt",1);
 		multireader(RankLib_files_train, RankLib_dir+"RankLib_total.txt", 0);
 		multireader(RankLib_files_test, RankLib_dir+"RankLib_total_test.txt", 0);
@@ -26,14 +26,14 @@ public class multiple_file_reader
 	}
 	public static void multireader(String[] input_dir, String output_file, int flag)
 	{
-		BufferedReader[] reader = new BufferedReader[4];
+		BufferedReader[] reader = new BufferedReader[3];
 		PrintWriter writer = null;
 		try {
 			writer = new PrintWriter(new BufferedWriter(new FileWriter(output_file, false)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		for(int i=1; i<4; i++)
+		for(int i=0; i<3; i++)
 		{
 			File file = new File(input_dir[i]);
 			try {
@@ -45,9 +45,9 @@ public class multiple_file_reader
 		}
 		String line;
 		try {
-			while((line = reader[1].readLine())!=null)
+			while((line = reader[0].readLine())!=null)
 			{
-				int count = 12;
+				int count = 16;
 				String[] str = line.split("\\s+");
 				if(flag == 0)
 				{
@@ -58,7 +58,7 @@ public class multiple_file_reader
 				}
 				else
 					writer.print(line+" ");
-				for(int i=2; i<4; i++)
+				for(int i=1; i<2; i++)
 				{
 					line = reader[i].readLine();
 					String[] splited = line.split("\\s+");
@@ -71,9 +71,13 @@ public class multiple_file_reader
 							{
 								writer.print(count+":"+splited[j].substring(2)+" ");
 							}
-							else
+							else if(j < 101)
 							{
 								writer.print(count+":"+splited[j].substring(3)+" ");
+							}
+							else
+							{
+								writer.print(count+":"+splited[j].substring(4)+" ");
 							}
 							count++;
 						}
@@ -86,9 +90,13 @@ public class multiple_file_reader
 							{
 								writer.print(count+":"+splited[j].substring(2)+" ");
 							}
-							else
+							else if(j < 100)
 							{
 								writer.print(count+":"+splited[j].substring(3)+" ");
+							}
+							else
+							{
+								writer.print(count+":"+splited[j].substring(4)+" ");
 							}
 							count++;
 						}
