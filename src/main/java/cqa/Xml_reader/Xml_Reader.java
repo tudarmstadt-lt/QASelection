@@ -18,7 +18,7 @@ public class Xml_Reader                    // File for reading XML files
 		//get_users();
 		try {
 			Document document = reader.read(inputFile);
-			List<Node> nodes = document.selectNodes("xml/Thread");
+			List<Node> nodes = document.selectNodes("xml/Thread");         //read XML file
 			PrintWriter writer = null;
 			try {
 				//writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Xml_reader/parsed_file.txt", false)));
@@ -28,7 +28,7 @@ public class Xml_Reader                    // File for reading XML files
 			}
 			for(int i=0; i< nodes.size(); i++)
 			{
-				String l = nodes.get(i).selectSingleNode("RelQuestion/RelQBody").getText().trim().replaceAll("\\s+", " ");
+				String l = nodes.get(i).selectSingleNode("RelQuestion/RelQBody").getText().trim().replaceAll("\\s+", " ");           //Extract Question
 				//String q_id = nodes.get(i).selectSingleNode("RelQuestion").valueOf("@RELQ_ID");
 				//System.out.println(q_id);
 				//writer.println(q_id);
@@ -37,7 +37,7 @@ public class Xml_Reader                    // File for reading XML files
 			    List<Node> comment = nodes.get(i).selectNodes("RelComment");
 			    for(int j=0; j<comment.size(); j++)
 			    {
-			    	l = comment.get(j).selectSingleNode("RelCText").getText().trim().replaceAll("\\s+", " ");
+			    	l = comment.get(j).selectSingleNode("RelCText").getText().trim().replaceAll("\\s+", " ");                        // Extract Comment
 			    	//String c_id = comment.get(j).valueOf("@RELC_ID");
 			    	//String label = comment.get(j).valueOf("@RELC_RELEVANCE2RELQ");
 			    	//writer.println(c_id+" "+label);
@@ -50,7 +50,7 @@ public class Xml_Reader                    // File for reading XML files
 			e.printStackTrace();
 		}
 	}
-	public static void get_users()               
+	public static void get_users()                     //get user information from XML file          
     {
 		File inputFile = new File("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/CQA_Updated/data/semeval2016-task3-cqa-ql-traindev-v3.2/v3.2/train/SemEval2016-Task3-CQA-QL-train-part1-subtaskA.xml");
 		SAXReader reader = new SAXReader();

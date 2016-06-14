@@ -54,7 +54,7 @@ public class Writer
 						String l = reader_3.readLine();
 						String bin_class = get_class(l);
 						comp_class(label, Double.parseDouble(l), c_id);
-						writer.println(q_id+" "+c_id+" 0 "+score+" "+bin_class);
+						writer.println(q_id+" "+c_id+" 0 "+score+" "+bin_class);        //scorer script format
 					}
 				}
 				while((q_id = reader.readLine())!=null);

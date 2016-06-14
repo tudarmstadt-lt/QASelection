@@ -13,10 +13,10 @@ public class multi_file_reader
 {
 	public static void main(String args[])
 	{
-		String SVM_dir = "/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/CQA_Updated/data/Data_format_files/SVM/Binary/";
+		String SVM_dir = args[0];
 		String[] SVM_files_train = {SVM_dir+"SVM_file_binary.txt", SVM_dir+"SVM_thread_level.txt", SVM_dir+"SVM_embedding.txt"};
 		String[] SVM_files_test = {SVM_dir+"SVM_test_file_binary.txt", SVM_dir+"SVM_thread_level_test.txt", SVM_dir+"SVM_embedding_test.txt"};
-		String RankLib_dir = "/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/CQA_Updated/data/Data_format_files/RankLib/";
+		String RankLib_dir = args[1];
 		String[] RankLib_files_train = {RankLib_dir+"RankLib_file.txt", RankLib_dir+"RankLib_thread_level.txt", RankLib_dir+"RankLib_embedding.txt"};
 		String[] RankLib_files_test = {RankLib_dir+"RankLib_test_file.txt", RankLib_dir+"RankLib_thread_level_test.txt", RankLib_dir+"RankLib_embedding_test.txt"};
 		multireader(SVM_files_train, SVM_dir+"SVM_total.txt",1, 121);
@@ -24,7 +24,7 @@ public class multi_file_reader
 		multireader(RankLib_files_test, RankLib_dir+"RankLib_total_test.txt", 0, 121);
 		multireader(SVM_files_test, SVM_dir+"SVM_total_test.txt",1, 121);
 	}
-	public static void multireader(String[] input_dir, String output_file, int flag, int n)
+	public static void multireader(String[] input_dir, String output_file, int flag, int n)          //combine all data files and normalize
 	{
 		BufferedReader[] reader = new BufferedReader[3];
 		PrintWriter writer = null;
@@ -145,7 +145,7 @@ public class multi_file_reader
 			e.printStackTrace();
 		}
 	}
-	public static void normalize(double[][] arr, int n)
+	public static void normalize(double[][] arr, int n)                   //normalization code
 	{
 		for(int i=0; i<n; i++)
 		{
