@@ -27,8 +27,8 @@ public class Thread_testing
 			reader = new BufferedReader(new FileReader(file));
 			try {
 				String q_id = reader.readLine();
-				String[] good_words = {"good","qatar","u","visa","doha","time","2","people","school","company"};
-				String[] bad_words = {"u","qatar","good","visa","doha","time","people","lol","work","back"};
+				String[] good_words = {"good","qatar","u","visa","doha","time","2","people","school","company"};            //good class words
+				String[] bad_words = {"u","qatar","good","visa","doha","time","people","lol","work","back"};                //bad class words
 				String[] punc = {"!", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "+", "=", ":", ";", ".", "/", "<", ">", "{", "}", "[", "]", "~", "\\"};
 				do
 				{
@@ -114,7 +114,7 @@ public class Thread_testing
 			return 0;
 		}
 	}
-	public static double URL_matcher(String comment, String c_id)
+	public static double URL_matcher(String comment, String c_id)                     //match URLs
 	{
 		Pattern p = Pattern.compile("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]",Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(comment);
@@ -126,7 +126,7 @@ public class Thread_testing
         }
         return val;
 	}
-	public static double email_matcher(String comment, String c_id)
+	public static double email_matcher(String comment, String c_id)                  //match emails
 	{
 		Matcher m = Pattern.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+").matcher(comment);
 		double val = 0.0;
@@ -136,7 +136,7 @@ public class Thread_testing
         }
         return val;
 	}
-	public static double special_word_matcher(String[] to_match, String comment)
+	public static double special_word_matcher(String[] to_match, String comment)           //match special words
 	{
 		String[] str = comment.replaceAll("[^a-zA-Z0-9 ]", "").toLowerCase().split("\\s+");
 		double val = 0.0;
@@ -153,7 +153,7 @@ public class Thread_testing
 		}
 		return val;
 	}
-	public static double special_character_matcher(String to_match, String comment)
+	public static double special_character_matcher(String to_match, String comment)       //match special characters
 	{
 		int count = comment.split(Pattern.quote(to_match), -1).length - 1;
 		return 0.1*count;
@@ -177,7 +177,7 @@ public class Thread_testing
 		}
 		return 0;
 	}
-	public static int length_matcher(String comment)
+	public static int length_matcher(String comment)									//length of comment
 	{
 		return comment.length();
 	}

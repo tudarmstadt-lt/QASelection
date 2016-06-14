@@ -53,7 +53,7 @@ public class word2vecTraining {
                 .vocabCache(cache)
                 .build();
         vec.fit();
-        WordVectorSerializer.writeWordVectors(vec, args[1]);
-       
+        WordVectorSerializer.writeWordVectors(vec, args[1]);         //write word vectors
+        //WordVectorSerializer.writeFullModel(vec, args[1]);         //write model
     }
 }

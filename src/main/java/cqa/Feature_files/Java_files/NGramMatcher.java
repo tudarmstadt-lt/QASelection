@@ -39,10 +39,10 @@ public class NGramMatcher
 						line = reader2.readLine();
 						q_id_rank++;
 						String question = reader.readLine();
-						ArrayList<String> lp = embedding_maker(reader2, question);
-						ArrayList<List<String>> one_list = new ArrayList<>();
-						ArrayList<List<String>> two_list = new ArrayList<>();
-						ArrayList<List<String>> three_list = new ArrayList<>();
+						ArrayList<String> lp = embedding_maker(reader2, question);      //create list of similar words
+						ArrayList<List<String>> one_list = new ArrayList<>();           //unigram lists
+						ArrayList<List<String>> two_list = new ArrayList<>();			//bigram lists
+						ArrayList<List<String>> three_list = new ArrayList<>();			//trigram lists
 						for(int i=0; i<lp.size(); i++)
 						{
 							one_list.add(maker(lp.get(i),1));
@@ -102,12 +102,12 @@ public class NGramMatcher
 	
 		
 	}
-	public static List<String> maker(String s, int n)
+	public static List<String> maker(String s, int n)       //lists for n-grams
 	{
 		Gram gram = new Gram(s, n);
 		return gram.list();
 	}
-	public static int matcher(List<String> que_list, List<String> com_list)
+	public static int matcher(List<String> que_list, List<String> com_list)   //n-gram count calculation
 	{
 		int n_gram_count = 0;
 		for(int j=0; j<que_list.size(); j++)
@@ -189,7 +189,7 @@ public class NGramMatcher
 		}
 		String curStr="";
 		ArrayList<String> list = new ArrayList<>();
-		printUtil(dict, curStr, list, 0, dict.size());
+		printUtil(dict, curStr, list, 0, dict.size());        //Recursively calculate all possible sentences
 		return list;
 	}
 	static void printUtil(ArrayList<ArrayList<String>> strs, String curStr, ArrayList<String> list, int index, int n)

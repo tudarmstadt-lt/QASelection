@@ -97,7 +97,7 @@ public class embedding_writer
 	}
 }
 
-class vector
+class vector                                //find scoring vectors and cosine of question and comment vectors
 {
 	double[] vec;
 	public vector(String s)

@@ -78,7 +78,7 @@ public class Writer
 			e.printStackTrace();
 		}
 	}
-	public static void comp_class(String gold, double predict, String c_id)
+	public static void comp_class(String gold, double predict, String c_id)      //find misclassified comments
 	{
 		if(predict == 0.0)
 		{
@@ -104,13 +104,13 @@ public class Writer
 	}
 	public static double binary_class(String s)
 	{
-		if(s.equals("Bad"))
+		if(s.equals("Good"))
 		{
-			return 0.0;
+			return 1.0;
 		}
 		else
 		{
-			return 1.0;
+			return 0.0;
 		}
 	}
 	public static String get_bool(String s)

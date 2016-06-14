@@ -78,8 +78,8 @@ public class Similarity_feature_generator         //File generating various stri
 //						 f[15] = matcher(one_list, aone_list);
 //						 f[16] = matcher(two_list, atwo_list);
 //						 f[17] = matcher(three_list, athree_list);
-						 //RankLib_writer(writer, label, q_id_rank, c_id);
-						 SVM_writer(writer, label, 1);
+						 RankLib_writer(writer, label, q_id_rank, c_id);
+						 //SVM_writer(writer, label, 1);
 					}					
 				}
 				while((q_id = reader.readLine())!=null);
@@ -92,7 +92,7 @@ public class Similarity_feature_generator         //File generating various stri
 		}
 		
 	}
-	public static void RankLib_writer(PrintWriter writer, String label, int q_id_rank, String c_id)
+	public static void RankLib_writer(PrintWriter writer, String label, int q_id_rank, String c_id)  //RankLib File writer
 	{
 		writer.print(get_Label_value(label)+" "+"qid:"+q_id_rank+" ");
 		for(int i=0; i<f.length; i++)
@@ -101,7 +101,7 @@ public class Similarity_feature_generator         //File generating various stri
 		}
 		writer.println("# "+c_id);
 	}
-	public static void SVM_writer(PrintWriter writer, String label, int flag)
+	public static void SVM_writer(PrintWriter writer, String label, int flag)       //SVM file writer
 	{
 		if(flag == 0)
 		{
@@ -139,7 +139,7 @@ public class Similarity_feature_generator         //File generating various stri
 		}
 		return n_gram_count*1.0;
 	}
-	public static int get_Label_value(String s)
+	public static int get_Label_value(String s)                      //Generate multiclass labels
 	{
 		if(s.equals("Good"))
 		{
@@ -151,23 +151,23 @@ public class Similarity_feature_generator         //File generating various stri
 		}
 		return 3;
 	}
-	public static int binary_class(String s)
+	public static int binary_class(String s)                     //Generate binary labels
 	{
-		if(s.equals("Bad"))
-		{
-			return 0;
-		}
-		else
+		if(s.equals("Good"))
 		{
 			return 1;
 		}
+		else
+		{
+			return 0;
+		}
 	}
-	public static double ngram(String s1, String s2, int n)
+	public static double ngram(String s1, String s2, int n)        //ngram score
 	{
 		NGram ngram = new NGram(n);
 		return ngram.distance(s1, s2);
 	}
-	public static double cosine(String s1, String s2, int n)
+	public static double cosine(String s1, String s2, int n)       //cosine score
 	{
 		Cosine cos = new Cosine(n);
 		if(Double.isNaN(cos.similarity(s1,s2)))
@@ -176,7 +176,7 @@ public class Similarity_feature_generator         //File generating various stri
 		}
 		return cos.similarity(s1, s2);
 	}
-	public static double Jaccard(String s1, String s2, int n)
+	public static double Jaccard(String s1, String s2, int n)       //Jaccard score
 	{
 		Jaccard j2 = new Jaccard(n);
 		if(Double.isNaN(j2.similarity(s1,s2)))
@@ -185,12 +185,12 @@ public class Similarity_feature_generator         //File generating various stri
 		}
 		return j2.similarity(s1, s2);
 	}
-	public static double QGram(String s1, String s2, int n)
+	public static double QGram(String s1, String s2, int n)           //QGram score
 	{
 		QGram dig = new QGram(n);
 		return dig.distance(s1, s2);
 	}
-	public static double Sorensen(String s1, String s2, int n)
+	public static double Sorensen(String s1, String s2, int n)         //Sorensen score
 	{
 		SorensenDice sd = new SorensenDice(n);
 		if(Double.isNaN(sd.similarity(s1,s2)))
@@ -199,22 +199,22 @@ public class Similarity_feature_generator         //File generating various stri
 		}
 		return sd.similarity(s1, s2);
 	}
-	public static double JaroWinkler(String s1, String s2)
+	public static double JaroWinkler(String s1, String s2)				//JaroWinkler score
 	{
 		JaroWinkler jw = new JaroWinkler();
 		return jw.similarity(s1, s2);
 	}
-	public static double Damerau(String s1, String s2)
+	public static double Damerau(String s1, String s2)					//Damerau score
 	{
 		Damerau damerau = new Damerau();
 		return damerau.distance(s1, s2);
 	}
-	public static double Levenshtein(String s1, String s2)
+	public static double Levenshtein(String s1, String s2)				//Levenshtein score
 	{
 		Levenshtein levenshtein = new Levenshtein();
 		return levenshtein.distance(s1, s2);
 	}
-	public static double NormalizedLevenshtein(String s1, String s2)
+	public static double NormalizedLevenshtein(String s1, String s2)		//Normalized Levenshtein score
 	{
 		NormalizedLevenshtein l = new NormalizedLevenshtein();
 		if(Double.isNaN(l.distance(s1,s2)))
@@ -223,7 +223,7 @@ public class Similarity_feature_generator         //File generating various stri
 		}
 		return l.distance(s1, s2);
 	}
-	public static double LCS(String s1, String s2)
+	public static double LCS(String s1, String s2)							// LCS score
 	{
 		LongestCommonSubsequence lcs = new LongestCommonSubsequence();
 		if(Double.isNaN(lcs.distance(s1,s2)))
@@ -234,7 +234,7 @@ public class Similarity_feature_generator         //File generating various stri
 	}
 }
 
-class Gram {
+class Gram {																//n-gram generation code
 
     private final int n;
     private final String text;

@@ -19,10 +19,10 @@ public class multi_file_reader
 		String RankLib_dir = "/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/CQA_Updated/data/Data_format_files/RankLib/";
 		String[] RankLib_files_train = {RankLib_dir+"RankLib_file.txt", RankLib_dir+"RankLib_thread_level.txt", RankLib_dir+"RankLib_embedding.txt"};
 		String[] RankLib_files_test = {RankLib_dir+"RankLib_test_file.txt", RankLib_dir+"RankLib_thread_level_test.txt", RankLib_dir+"RankLib_embedding_test.txt"};
-		multireader(SVM_files_train, SVM_dir+"SVM_total.txt",1, 20);
-		multireader(RankLib_files_train, RankLib_dir+"RankLib_total.txt", 0, 20);
-		multireader(RankLib_files_test, RankLib_dir+"RankLib_total_test.txt", 0, 20);
-		multireader(SVM_files_test, SVM_dir+"SVM_total_test.txt",1, 20);
+		multireader(SVM_files_train, SVM_dir+"SVM_total.txt",1, 121);
+		multireader(RankLib_files_train, RankLib_dir+"RankLib_total.txt", 0, 121);
+		multireader(RankLib_files_test, RankLib_dir+"RankLib_total_test.txt", 0, 121);
+		multireader(SVM_files_test, SVM_dir+"SVM_total_test.txt",1, 121);
 	}
 	public static void multireader(String[] input_dir, String output_file, int flag, int n)
 	{
@@ -55,7 +55,7 @@ public class multi_file_reader
 				caller++;
 				int count = 0;
 				int start;
-				for(int i=0; i<2; i++)
+				for(int i=0; i<3; i++)
 				{
 					line = reader[i].readLine();
 					if(line == null)

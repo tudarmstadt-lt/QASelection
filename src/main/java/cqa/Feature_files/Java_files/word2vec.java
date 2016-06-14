@@ -21,7 +21,7 @@ public class word2vec {
 
     public static void main(String[] args) throws Exception {
     			
-    			Word2Vec word2vec = WordVectorSerializer.loadFullModel(args[0]);
+    			Word2Vec word2vec = WordVectorSerializer.loadFullModel(args[0]);          //load model
     			File file = new File(args[1]);
     			BufferedReader reader = null;
     			PrintWriter writer = null;
@@ -41,7 +41,7 @@ public class word2vec {
     					{
 	    					for(int j=0; j<splited.length; j++)
 	    					{
-	    						ArrayList<String> lst = new ArrayList<String>(word2vec.wordsNearest(splited[j], 10));
+	    						ArrayList<String> lst = new ArrayList<String>(word2vec.wordsNearest(splited[j], 10));      //find top 10 similar words
 	    						if(splited[j].length() != 0)
 	    						{
 	    							writer.print(splited[j]+": ");

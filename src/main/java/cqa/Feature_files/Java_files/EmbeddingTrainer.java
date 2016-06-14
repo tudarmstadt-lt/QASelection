@@ -23,7 +23,7 @@ public class EmbeddingTrainer
 			reader = new BufferedReader(new FileReader(file));
 			String l;
 			try {
-				HashMap<String, vector> map = new HashMap<>();
+				HashMap<String, vector> map = new HashMap<>();    //HashMap to store vectors for each word
 				while((l = reader.readLine())!= null)
 				{
 					String splited[] = l.split("\\s+", 2);
@@ -32,7 +32,7 @@ public class EmbeddingTrainer
 					vector v = new vector(splited[1]);
 					map.put(word, v);
 				}
-				sentence_vector(map, args[1], args[2]);
+				sentence_vector(map, args[1], args[2]);          // generate sentence vectors from word vectors
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -61,7 +61,7 @@ public class EmbeddingTrainer
 				{
 					String question = reader.readLine();
 					String[] str = question.split("\\s+");
-					calculate_avg(writer, str, map, q_id, "");
+					calculate_avg(writer, str, map, q_id, "");        //use average to calculate sentence vectors
 					for(int i=0; i<10; i++)
 					{
 						String st = reader.readLine();
@@ -125,7 +125,7 @@ public class EmbeddingTrainer
 	}
 }
 
-class vector
+class vector                   //vector class
 {
 	double[] vec;
 	public vector(String s)

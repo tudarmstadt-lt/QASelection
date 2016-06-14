@@ -38,9 +38,9 @@ public class w2vModel
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-	   tsne(args[0], args[1]); 
+	   tsne(args[0], args[1]);                        //tsne function call
 	}
-	public static void tsne(String input, String output)
+	public static void tsne(String input, String output)           //dimensionality reduction code
 	{
         Nd4j.dtype = DataBuffer.Type.DOUBLE;
         Nd4j.factory().setDType(DataBuffer.Type.DOUBLE);
