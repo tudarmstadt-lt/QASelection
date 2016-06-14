@@ -1,0 +1,88 @@
+Documentation
+--------------------------------------------------------------------------
+Week wise analysis
+--------------------------------------------------------------------------
+Week 1 (9th - 15 May)
+1. Dataset understanding
+2. Review of past systems, final decisions on baseline
+2. Creating eclipse project
+3. Familiarity with git
+4. Implementation of string similarity features for string similarity between question and comment thread
+
+Week 2 (16th - 22nd May)
+1. Dataset clarification
+2. Using RankLib and LibSVM for ranking and classification respectively
+3. Representation in the dataformat of the tools
+4. Testing with different rankers in RankLib
+5. Literature review on dialogue identification and thread level features
+6. Stopword removal
+
+Week 3 (23rd - 29th May)
+1. Implementation of user and thread level features
+2. Ablation test 
+3. Combining results from all feature files
+4. Experimented with LibLINEAR and SVMRank
+5. Brainstorming on the reasons for low accuracy
+6. Documentation process started
+
+Week 4 (30th may - 5th June)
+1. Transformed all features from binary to numerical, discarded few features
+2. Started word2vec Training on deep learning for java
+3. Trained word embeddings on Unannotated and Google dataset
+4. Combined word embeddings into feature space
+5. Z-score normalized all data on thread level
+6. Tuned SVM parameters using script
+7. Ablation test
+
+Week 5 (6th - 12th June)
+1. Made attempts at dimensionality reduction of embedding vectors
+2. Using model from Unannotated dataset, found similar words to each word in train/dev set
+3. Statistical paraphrasing of n-grams in the data
+4. Cleaned all available data, made 3 separate datasets for analysis
+5. Trained Topic model on unannotated dataset and train+dev dataset
+6. Potential class effect on data
+7. Ablation test 
+
+
+Project Analysis
+--------------------------------------------------------------------------
+Major files (Right now)
+1. Data Format Files
+   Has the data in the required format for different tools used so far. This consists of RankLib, SVM , Mallet and Word2Vec data and the jars required to run them. For SVM, we have separate multiclass and binary classification. For Word2Vec, we have separate Unannotated and Google models.
+2. Readers
+   1) Xml_Reader.java - To read from the XML files and put the data in proper format
+   2) multi_file_reader.java - To combine data format files of different feature files into one for ranking and classification, z-score normalized.
+   3) multiple_file_reader.java - To combine data format files of different feature files into one for ranking and classification,not normalized.
+3. Writers
+   1) Writer.java - Creates the data format files from feature results file after tools are processed.
+   2) embedding_writer.java - Java file to create data format files from word embedding vectors for question and comments.
+4. Java files
+   1) Similarity_feature_generator.java - String similarity fetaures are implemented. Presently has 15 string similarity features including n-gram, cosine similarity, Jaccard, Levenshtein, SorensenDice, Damerau, JaroWinkler, QGram, Longest Common Subsequence.
+   2) Thread_testing.java - Has 5 thread level binary features including presence of URLs, emails, special words, length features and question identification.
+   3) EmbeddingTrainer.java - Java file to generate sentence vectors from word vectors from word2vec.
+   4) word2vec.java - Get top words similar to each word in training/dev set.
+   5) word2vecTraining.java - Java file for word2vec vector and model generation.
+   6) w2vModel.java - Java file for dimensionality reduction using tsne.
+   7) User_Features.java - Has stopword removal methods for training and test data. Has a wordcount and list of most common words representing a class.
+
+Other files
+------------------------------------------------------------------------
+   Ablation_test.txt - Has the results of Ablation test.
+   users_each_thread.txt - Another supporting file for data analysis.
+   Documentation.txt - The Documentation of the project.
+
+Scripts used
+------------------------------------------------------------------------
+check.py - Python file to clean all datasets. The methods include
+- Removing URLs, emails, HTML tags
+- Removing apostrophe words
+- Removing slangs, custom unclean data
+- Punctuations
+- Stopwords
+grid.py - Tune SVM parameters for classification. 
+google.py - generate sentence vectors using Gensim word2vec from Google News dataset.
+
+Old files 
+------------------------------------------------------------------------
+1) Thread_level_users.java - Has 5 binary features identifying if a comment by the asker of the question has an acknowledgement, is a question or not.
+2) Thread_level_proximity.java - Has numerical features computing the distance between next comment by the asker and the present comment (4 features).
