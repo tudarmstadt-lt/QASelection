@@ -64,6 +64,7 @@ Major files (Right now)
    5) word2vecTraining.java - Java file for word2vec vector and model generation.
    6) w2vModel.java - Java file for dimensionality reduction using tsne.
    7) User_Features.java - Has stopword removal methods for training and test data. Has a wordcount and list of most common words representing a class.
+   8) NGramMatcher.java - Find common n-grams between question and comment on extended wordlist using statistical paraphrasing.
 
 Other files
 ------------------------------------------------------------------------
