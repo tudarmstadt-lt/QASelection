@@ -35,6 +35,8 @@ public class word2vec {
     				while((line = reader.readLine()) != null)
     				{
     					writer.println(line);
+    					String[] qs = line.split("\\s+");
+    					int num = Integer.parseInt(qs[1]);
     					String question = reader.readLine();
     					String[] splited = question.split("\\s+");
     					if(question.length() != 0)
@@ -53,7 +55,7 @@ public class word2vec {
 	    						}
 	    					}
     					}
-    					for(int i=0; i<10; i++)
+    					for(int i=0; i<num; i++)
     					{
     						String str = reader.readLine();
 							splited = str.split("\\s+");

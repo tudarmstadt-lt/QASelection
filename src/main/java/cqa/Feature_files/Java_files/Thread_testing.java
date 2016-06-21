@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 public class Thread_testing
 {
+	static double[] f = new double[5];
 	public static void main(String args[])
 	{
 		File file = new File(args[0]);
@@ -27,36 +28,32 @@ public class Thread_testing
 			reader = new BufferedReader(new FileReader(file));
 			try {
 				String q_id = reader.readLine();
-				String[] good_words = {"good","qatar","u","visa","doha","time","2","people","school","company"};            //good class words
-				String[] bad_words = {"u","qatar","good","visa","doha","time","people","lol","work","back"};                //bad class words
+				String[] good_words = {"get","good","qatar","go","one","visa","also","com","like","doha","need","would","know","try","best","think","http","take","time","al"};            //good class words
+				String[] bad_words = {"get","know","one","thanks","like","qatar","good","would","go","com","http","think","need","also","laugh","laud","time","people","dont","visa"};                //bad class words
 				String[] punc = {"!", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "+", "=", ":", ";", ".", "/", "<", ">", "{", "}", "[", "]", "~", "\\"};
 				do
 				{
-					double[][] arr = new double[5][10];
-					String[] labels = new String[10];
-					String[] cid = new String[10];
+					String[] qs = q_id.split("\\s+");
+					int num = Integer.parseInt(qs[1]);
 					String question = reader.readLine();
 					q_id_rank++;
-					for(int i=0; i<10; i++)
+					for(int i=0; i<num; i++)
 					{
 						String str = reader.readLine();
 						String[] splited = str.split("\\s+");
 						String c_id = splited[0];
-						cid[i] = c_id;
 						String label = splited[1];
-						labels[i] = label;
 						String comment = reader.readLine();
 						//System.out.println(comment);
-						arr[0][i] = URL_matcher(comment, c_id) + email_matcher(comment, c_id) + special_character_matcher("img", comment);
-						arr[1][i] = special_word_matcher(good_words, comment);
-						arr[2][i] = special_word_matcher(bad_words, comment);
-						arr[3][i] = special_character_matcher("?", comment) + special_character_matcher("@", comment) + punc_matcher(punc, comment);
-						arr[4][i] = length_matcher(comment);
+						f[0] = URL_matcher(comment, c_id) + email_matcher(comment, c_id) + tag_matcher(comment, c_id);
+						f[1] = special_word_matcher(good_words, comment);
+						f[2] = special_word_matcher(bad_words, comment);
+						f[3] = special_character_matcher("?", comment) + special_character_matcher("@", comment)+punc_matcher(punc,comment);
+						f[4] = length_matcher(comment);
 						//arr[5][i] = punc_matcher(punc, comment);
+						RankLib_writer(writer, label, q_id_rank, c_id);
+						//SVM_writer(writer, label, 1);
 					}
-
-					RankLib_writer(writer, labels, q_id_rank, cid, arr);
-					//SVM_writer(writer, labels, 1, arr);
 				}
 				while((q_id = reader.readLine())!=null);
 				writer.close();
@@ -67,28 +64,34 @@ public class Thread_testing
 			e.printStackTrace();
 		}
 	}
-	public static void RankLib_writer(PrintWriter writer, String[] label, int q_id_rank, String[] c_id, double[][] arr)
+	public static void RankLib_writer(PrintWriter writer, String label, int q_id_rank, String c_id)  //RankLib File writer
 	{
-		for(int i=0; i<10; i++)
+		writer.print(get_Label_value(label)+" "+"qid:"+q_id_rank+" ");
+		for(int i=0; i<f.length; i++)
 		{
-			writer.println(get_Label_value(label[i])+" "+"qid:"+q_id_rank+" 1:"+arr[0][i]+" 2:"+arr[1][i]+" 3:"+arr[2][i]+" 4:"+arr[3][i]+" 5:"+arr[4][i]+" # "+c_id[i]);
+			writer.print((i+1)+":"+f[i]+" ");
 		}
+		writer.println("# "+c_id);
 	}
-	public static void SVM_writer(PrintWriter writer, String[] label, int flag, double[][] arr)
+	public static void SVM_writer(PrintWriter writer, String label, int flag)       //SVM file writer
 	{
 		if(flag == 0)
 		{
-			for(int i=0; i<10; i++)
+			writer.print(get_Label_value(label)+" ");
+			for(int i=0; i<f.length; i++)
 			{
-				writer.println(get_Label_value(label[i])+" "+"1:"+arr[0][i]+" 2:"+arr[1][i]+" 3:"+arr[2][i]+" 4:"+arr[3][i]+" 5:"+arr[4][i]);
+				writer.print((i+1)+":"+f[i]+" ");
 			}
+			writer.println();
 		}
 		else
 		{
-			for(int i=0; i<10; i++)
+			writer.print(binary_class(label)+" ");
+			for(int i=0; i<f.length; i++)
 			{
-				writer.println(binary_class(label[i])+" "+"1:"+arr[0][i]+" 2:"+arr[1][i]+" 3:"+arr[2][i]+" 4:"+arr[3][i]+" 5:"+arr[4][i]);
+				writer.print((i+1)+":"+f[i]+" ");
 			}
+			writer.println();
 		}
 	}
 	public static int get_Label_value(String s)
@@ -99,9 +102,9 @@ public class Thread_testing
 		}
 		else if(s.equals("PotentiallyUseful"))
 		{
-			return 2;
+			return 3;
 		}
-		return 3;
+		return 2;
 	}
 	public static int binary_class(String s)
 	{
@@ -136,15 +139,26 @@ public class Thread_testing
         }
         return val;
 	}
+	public static double tag_matcher(String comment, String c_id)
+	{
+		
+		Matcher m = Pattern.compile("<[^>]*>").matcher(comment);
+		double val = 0.0;
+        while(m.find())
+        {
+        	val+=0.1;
+        }
+        return val;
+	}
 	public static double special_word_matcher(String[] to_match, String comment)           //match special words
 	{
-		String[] str = comment.replaceAll("[^a-zA-Z0-9 ]", "").toLowerCase().split("\\s+");
+		String[] str = comment.replaceAll("[^a-zA-Z0-9 ]", " ").toLowerCase().split("\\s+");
 		double val = 0.0;
-		for(String words : to_match)
+		for(int i=0; i<to_match.length; i++)
 		{
 			for(String comm : str)
 			{
-				if(words.equals(comm))
+				if(to_match[i].equals(comm))
 				{
 					//System.out.println(comment);
 					val+=0.1;
@@ -169,7 +183,7 @@ public class Thread_testing
 	}
 	public static int begin_matcher(String to_match, String comment)
 	{
-		String[] str = comment.replaceAll("[^a-zA-Z0-9 ]", "").toLowerCase().split("\\s+");
+		String[] str = comment.replaceAll("[^a-zA-Z0-9 ]", " ").toLowerCase().split("\\s+");
 		if(str.length > 0 && str[0].equals(to_match))
 		{
 			//System.out.println(comment);

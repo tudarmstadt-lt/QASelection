@@ -26,7 +26,7 @@ import info.debatty.java.stringsimilarity.SorensenDice;
 
 public class Similarity_feature_generator         //File generating various string features
 {
-	static double[] f = new double[15];
+	static double[] f = new double[20];
 	public static void main(String[] args)
 	{
 		File file = new File(args[0]);
@@ -42,47 +42,56 @@ public class Similarity_feature_generator         //File generating various stri
 		try {
 			reader = new BufferedReader(new FileReader(file));
 			try {
-				String q_id = reader.readLine();
+				String str = reader.readLine();				
 				do
 				{
+					String[] qs = str.split("\\s+");
+					String q_id = qs[0];
+					int num = Integer.parseInt(qs[1]);
 					String question = reader.readLine();
 					List<String> one_list = maker(question, 1);
-					List<String> two_list = maker(question, 2);
-					List<String> three_list = maker(question, 3);
+//					List<String> two_list = maker(question, 2);
+//					List<String> three_list = maker(question, 3);
 					q_id_rank++;
-					for(int i=0; i<10; i++)
+					for(int i=0; i<num; i++)
 					{
-						String str = reader.readLine();
+						str = reader.readLine();
 						String[] splited = str.split("\\s+");
 						String c_id = splited[0];
 						String label = splited[1];
 						String comment = reader.readLine();
 						List<String> aone_list = maker(comment, 1);
-						List<String> atwo_list = maker(comment, 2);
-						List<String> athree_list = maker(comment, 3);
-						 f[0] = ngram(question, comment, 2);
-						 f[1] = ngram(question, comment, 3);
-						 f[2] = cosine(question, comment, 2);
-						 f[3] = cosine(question, comment, 3);
-						 f[4] = Jaccard(question, comment, 2);
-						 f[5] = Jaccard(question, comment, 3);
-						 f[6] = QGram(question, comment, 2);
-						 f[7] = QGram(question, comment, 3);
-						 f[8] = Sorensen(question, comment, 2);
-						 f[9] = Sorensen(question, comment, 3);
-						 f[10] = JaroWinkler(question, comment);
-						 f[11] = Damerau(question, comment);
-						 f[12] = Levenshtein(question, comment);
-						 f[13] = NormalizedLevenshtein(question, comment);
-						 f[14] = LCS(question, comment);
-//						 f[15] = matcher(one_list, aone_list);
+//						List<String> atwo_list = maker(comment, 2);
+//						List<String> athree_list = maker(comment, 3);
+						 f[0] = ngram(question, comment, 1);
+						 f[1] = ngram(question, comment, 2);
+						 f[2] = ngram(question, comment, 3);
+						 f[3] = cosine(question, comment,1);
+						 f[4] = cosine(question, comment, 2);
+						 f[5] = cosine(question, comment, 3);
+						 f[6] = Jaccard(question, comment, 1);
+						 f[7] = Jaccard(question, comment, 2);
+						 f[8] = Jaccard(question, comment, 3);
+						 f[9] = QGram(question, comment, 1);
+						 f[10] = QGram(question, comment, 2);
+						 f[11] = QGram(question, comment, 3);
+						 f[12] = Sorensen(question, comment, 1);
+						 f[13] = Sorensen(question, comment, 2);
+						 f[14] = Sorensen(question, comment, 3);
+						 f[15] = JaroWinkler(question, comment);
+						 f[16] = Damerau(question, comment);
+						 f[17] = Levenshtein(question, comment);
+						 f[18] = NormalizedLevenshtein(question, comment);
+						 f[19] = LCS(question, comment);
+//						 f[20] = matcher(one_list, aone_list)/question.length();
+//						 f[21] = matcher(one_list, aone_list)/comment.length();
 //						 f[16] = matcher(two_list, atwo_list);
 //						 f[17] = matcher(three_list, athree_list);
 						 RankLib_writer(writer, label, q_id_rank, c_id);
 						 //SVM_writer(writer, label, 1);
 					}					
 				}
-				while((q_id = reader.readLine())!=null);
+				while((str = reader.readLine())!=null);
 				writer.close();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -147,9 +156,9 @@ public class Similarity_feature_generator         //File generating various stri
 		}
 		else if(s.equals("PotentiallyUseful"))
 		{
-			return 2;
+			return 3;
 		}
-		return 3;
+		return 2;
 	}
 	public static int binary_class(String s)                     //Generate binary labels
 	{
@@ -232,57 +241,4 @@ public class Similarity_feature_generator         //File generating various stri
 		}
 		return lcs.distance(s1, s2);
 	}
-}
-
-class Gram {																//n-gram generation code
-
-    private final int n;
-    private final String text;
-
-    private final int[] indexes;
-    private int index = -1;
-    private int found = 0;
-
-    public Gram(String text, int n) {
-        this.text = text;
-        this.n = n;
-        indexes = new int[n];
-    }
-
-    private boolean seek() {
-        if (index >= text.length()) {
-            return false;
-        }
-        push();
-        while(++index < text.length()) {
-            if (text.charAt(index) == ' ') {
-                found++;
-                if (found<n) {
-                    push();
-                } else {
-                    return true;
-                }
-            }
-        }
-        return true;
-    }
-
-    private void push() {
-        for (int i = 0; i < n-1; i++) {
-            indexes[i] = indexes[i+1];
-        }
-        indexes[n-1] = index+1;
-    }
-
-    public List<String> list() {
-        List<String> ngrams = new ArrayList<String>();
-        while (seek()) {
-            ngrams.add(get());
-        }
-        return ngrams;
-    }
-
-    private String get() {
-        return text.substring(indexes[0], index);
-    }
 }

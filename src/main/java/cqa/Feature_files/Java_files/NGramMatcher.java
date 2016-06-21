@@ -36,23 +36,13 @@ public class NGramMatcher
 				try {
 					while((line = reader.readLine()) != null)
 					{
+						String[] qs = line.split("\\s+");
+						int num = Integer.parseInt(qs[1]);
 						line = reader2.readLine();
 						q_id_rank++;
 						String question = reader.readLine();
-						ArrayList<String> lp = embedding_maker(reader2, question);      //create list of similar words
-						ArrayList<List<String>> one_list = new ArrayList<>();           //unigram lists
-						ArrayList<List<String>> two_list = new ArrayList<>();			//bigram lists
-						ArrayList<List<String>> three_list = new ArrayList<>();			//trigram lists
-						for(int i=0; i<lp.size(); i++)
-						{
-							one_list.add(maker(lp.get(i),1));
-							two_list.add(maker(lp.get(i),2));
-							three_list.add(maker(lp.get(i),3));
-						}
-//						List<String> one_list = maker(question, 1);
-//						List<String> two_list = maker(question, 2);
-//						List<String> three_list = maker(question, 3);
-						for(int i=0; i<10; i++)
+						ArrayList<ArrayList<String>> lp = embedding_maker(reader2, question);      //create list of similar words
+						for(int i=0; i<num; i++)
 						{
 							String str = reader.readLine();
 							String[] splited = str.split("\\s+");
@@ -60,31 +50,11 @@ public class NGramMatcher
 							String label = splited[1];
 							str = reader2.readLine();
 							String comment = reader.readLine();
-							ArrayList<String> lp2 = embedding_maker(reader2, comment);
-							ArrayList<List<String>> aone_list = new ArrayList<>();
-							ArrayList<List<String>> atwo_list = new ArrayList<>();
-							ArrayList<List<String>> athree_list = new ArrayList<>();
-							for(int j=0; j<lp2.size(); j++)
-							{
-								aone_list.add(maker(lp2.get(j),1));
-								atwo_list.add(maker(lp2.get(j),2));
-								athree_list.add(maker(lp2.get(j),3));
-							}
-
-//							List<String> aone_list = maker(comment, 1);
-//							List<String> atwo_list = maker(comment, 2);
-//							List<String> athree_list = maker(comment, 3);
-							long count = 0;
-							for(int j=0; j<lp.size(); j++)
-							{
-								for(int k=0; k<lp2.size(); k++)
-								{
-									count++;
-									f1 += (matcher(one_list.get(j), aone_list.get(k)) - f1)/count;
-									f2 += (matcher(two_list.get(j), atwo_list.get(k)) - f2)/count;
-									f3 += (matcher(three_list.get(j), athree_list.get(k)) - f3)/count;
-								}
-							}
+							ArrayList<ArrayList<String>> lp2 = embedding_maker(reader2, comment);
+							f1 = n_gram_generator(lp, lp2, 1);
+							f2 = n_gram_generator(lp, lp2, 2);
+							f3 = n_gram_generator(lp, lp2, 3);
+							//System.out.println(f1+" "+f2+" "+f3);
 							RankLib_writer(writer, label, q_id_rank, c_id);
 							SVM_writer(writer2, label, 1);
 						}
@@ -138,9 +108,9 @@ public class NGramMatcher
 		}
 		else if(s.equals("PotentiallyUseful"))
 		{
-			return 2;
+			return 3;
 		}
-		return 3;
+		return 2;
 	}
 	public static int binary_class(String s)
 	{
@@ -153,7 +123,92 @@ public class NGramMatcher
 			return 0;
 		}
 	}
-	public static ArrayList<String> embedding_maker(BufferedReader reader2, String s)
+	public static int n_gram_generator(ArrayList<ArrayList<String>> s1, ArrayList<ArrayList<String>> s2, int n)
+	{
+		if(n==1 && s1.size()>0 && s2.size()>0)
+		{
+			ArrayList<String> oneq = new ArrayList<>();
+			for(int i=0; i<s1.size(); i++)
+			{
+				for(int j=0; j<s1.get(i).size(); j++)
+				{
+					oneq.add(s1.get(i).get(j));
+				}
+			}
+			ArrayList<String> onea = new ArrayList<>();
+			for(int i=0; i<s2.size(); i++)
+			{
+				for(int j=0; j<s2.get(i).size(); j++)
+				{
+					onea.add(s2.get(i).get(j));
+				}
+			}
+			oneq.retainAll(onea);
+			return oneq.size();
+		}
+		else if(n==2 && s1.size()>1 && s2.size()>1)
+		{
+			ArrayList<String> oneq = new ArrayList<>();
+			for(int i=0; i<s1.size()-1; i++)
+			{
+				for(int j=0; j<s1.get(i).size(); j++)
+				{
+					for(int k=0; k<s1.get(i+1).size(); k++)
+					{
+						oneq.add(s1.get(i).get(j)+" "+s1.get(i+1).get(k));
+					}
+				}
+			}
+			ArrayList<String> onea = new ArrayList<>();
+			for(int i=0; i<s2.size()-1; i++)
+			{
+				for(int j=0; j<s2.get(i).size(); j++)
+				{
+					for(int k=0; k<s2.get(i+1).size(); k++)
+					{
+						onea.add(s2.get(i).get(j)+" "+s2.get(i+1).get(k));
+					}
+				}
+			}
+			oneq.retainAll(onea);
+			return oneq.size();
+		}
+		else if(n==3 && s1.size()>2 && s2.size()>2)
+		{
+			ArrayList<String> oneq = new ArrayList<>();
+			for(int i=0; i<s1.size()-2; i++)
+			{
+				for(int j=0; j<s1.get(i).size(); j++)
+				{
+					for(int k=0; k<s1.get(i+1).size(); k++)
+					{
+						for(int l=0; l<s1.get(i+2).size(); l++)
+						{
+							oneq.add(s1.get(i).get(j)+" "+s1.get(i+1).get(k)+" "+s1.get(i+2).get(l));
+						}
+					}
+				}
+			}
+			ArrayList<String> onea = new ArrayList<>();
+			for(int i=0; i<s2.size()-2; i++)
+			{
+				for(int j=0; j<s2.get(i).size(); j++)
+				{
+					for(int k=0; k<s2.get(i+1).size(); k++)
+					{
+						for(int l=0; l<s2.get(i+2).size(); l++)
+						{
+							onea.add(s2.get(i).get(j)+" "+s2.get(i+1).get(k)+" "+s2.get(i+2).get(l));
+						}
+					}
+				}
+			}
+			oneq.retainAll(onea);
+			return oneq.size();
+		}
+		return 0;
+	}
+	public static ArrayList<ArrayList<String>> embedding_maker(BufferedReader reader2, String s)
 	{
 		String line;
 		int len = 0;
@@ -187,10 +242,7 @@ public class NGramMatcher
 					e.printStackTrace();
 				}	
 		}
-		String curStr="";
-		ArrayList<String> list = new ArrayList<>();
-		printUtil(dict, curStr, list, 0, dict.size());        //Recursively calculate all possible sentences
-		return list;
+		return dict;
 	}
 	static void printUtil(ArrayList<ArrayList<String>> strs, String curStr, ArrayList<String> list, int index, int n)
 	{
@@ -210,4 +262,57 @@ public class NGramMatcher
 		}
 	}
 
+}
+
+class Gram {																//n-gram generation code
+
+    private final int n;
+    private final String text;
+
+    private final int[] indexes;
+    private int index = -1;
+    private int found = 0;
+
+    public Gram(String text, int n) {
+        this.text = text;
+        this.n = n;
+        indexes = new int[n];
+    }
+
+    private boolean seek() {
+        if (index >= text.length()) {
+            return false;
+        }
+        push();
+        while(++index < text.length()) {
+            if (text.charAt(index) == ' ') {
+                found++;
+                if (found<n) {
+                    push();
+                } else {
+                    return true;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void push() {
+        for (int i = 0; i < n-1; i++) {
+            indexes[i] = indexes[i+1];
+        }
+        indexes[n-1] = index+1;
+    }
+
+    public List<String> list() {
+        List<String> ngrams = new ArrayList<String>();
+        while (seek()) {
+            ngrams.add(get());
+        }
+        return ngrams;
+    }
+
+    private String get() {
+        return text.substring(indexes[0], index);
+    }
 }

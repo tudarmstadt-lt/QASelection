@@ -59,10 +59,12 @@ public class EmbeddingTrainer
 			try {
 				while((q_id = reader.readLine())!=null)
 				{
+					String[] str = q_id.split("\\s+");
+					int num = Integer.parseInt(str[1]);
 					String question = reader.readLine();
-					String[] str = question.split("\\s+");
+					str = question.split("\\s+");
 					calculate_avg(writer, str, map, q_id, "");        //use average to calculate sentence vectors
-					for(int i=0; i<10; i++)
+					for(int i=0; i<num; i++)
 					{
 						String st = reader.readLine();
 						String[] splited = st.split("\\s+");
