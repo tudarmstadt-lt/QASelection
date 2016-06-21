@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
-
 public class Writer 
 {
 	static int oiso = 0;
@@ -17,6 +16,7 @@ public class Writer
 	static int ziso = 0;
 	static ArrayList<String>oisz_arr = new ArrayList<>();
 	static ArrayList<String>ziso_arr = new ArrayList<>();
+	
 	public static void main(String args[])
 	{
 		PrintWriter writer = null;
@@ -36,19 +36,22 @@ public class Writer
 			reader_2 = new BufferedReader(new FileReader(file_2));
 			reader_3 = new BufferedReader(new FileReader(file_3));
 			try {
-				String q_id = reader.readLine();
+				String str = reader.readLine();
 				do
 				{
+					String[] qs = str.split("\\s+");
+					String q_id = qs[0];
+					int num = Integer.parseInt(qs[1]);
 					String question = reader.readLine();
-					for(int i=0; i<10; i++)
+					for(int i=0; i<num; i++)
 					{
-						String str = reader.readLine();
+						str = reader.readLine();
 						String[] splited = str.split("\\s+");
 						String c_id = splited[0];
 						String label = splited[1];
 						String comment = reader.readLine();
 						String score_line = reader_2.readLine();
-						//System.out.println(score_line);
+						System.out.println(score_line);
 						splited = score_line.split("\\s+");
 						String score = splited[2];
 						String l = reader_3.readLine();
@@ -57,7 +60,7 @@ public class Writer
 						writer.println(q_id+" "+c_id+" 0 "+score+" "+bin_class);        //scorer script format
 					}
 				}
-				while((q_id = reader.readLine())!=null);
+				while((str = reader.readLine())!=null);
 				writer.close();
 				System.out.println("bad classified as bad: "+ zisz);
 				System.out.println("bad classified as good: "+ ziso);
