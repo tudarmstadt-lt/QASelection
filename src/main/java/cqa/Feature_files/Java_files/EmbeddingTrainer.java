@@ -8,7 +8,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+
+
 
 public class EmbeddingTrainer 
 {
@@ -63,7 +66,8 @@ public class EmbeddingTrainer
 					int num = Integer.parseInt(str[1]);
 					String question = reader.readLine();
 					str = question.split("\\s+");
-					calculate_avg(writer, str, map, q_id, "");        //use average to calculate sentence vectors
+					init(writer, q_id, "");
+					calculate_avg(writer, str, map);        //use average to calculate sentence vectors
 					for(int i=0; i<num; i++)
 					{
 						String st = reader.readLine();
@@ -72,7 +76,9 @@ public class EmbeddingTrainer
 						String label = splited[1];
 						String comment = reader.readLine();
 						str = comment.split("\\s+");
-						calculate_avg(writer, str, map, c_id, label);
+						init(writer, c_id, label);
+						trans(writer, map, question, comment);
+						calculate_avg(writer, str, map);
 					}
 				}
 				System.out.println(unnoticed);
@@ -86,7 +92,70 @@ public class EmbeddingTrainer
 			e.printStackTrace();
 		}
 	}
-	public static void calculate_avg(PrintWriter writer, String[] str, HashMap<String, vector> map, String id, String label)
+	public static void init(PrintWriter writer, String id, String label)
+	{
+		if(!label.isEmpty())
+			writer.print(id+" "+label+" ");
+		else
+			writer.print(id+" ");
+	}
+	public static void trans(PrintWriter writer, HashMap<String, vector> map, String ques, String ans)
+	{
+		String[] que_list = ques.split("\\s+");
+		String[] ans_list = ans.split("\\s+");
+		ArrayList<Double> d = new ArrayList<>();
+		for(String qword: que_list)
+		{
+			vector qv = map.get(qword);
+			if(qv != null)
+			{
+				double max_cos = 0.0;
+				for(String aword: ans_list)
+				{
+					vector qa = map.get(aword);
+					if(qa != null)
+					{
+						double pre_cos = vector_cos(qv, qa);
+						if(pre_cos > max_cos)
+						{
+							max_cos = pre_cos;
+							System.out.println(max_cos);
+						}
+					}
+				}
+				d.add(max_cos);
+			}	
+		}
+		double val=0.0;
+		System.out.println(d.size());
+		for(int i=0; i<d.size(); i++)
+		{
+			System.out.print(d.get(i)+" ");
+			val+= d.get(i);
+		}
+		System.out.println();
+		if(!d.isEmpty())
+			writer.print((val/d.size())+" ");
+		else
+			writer.print("0.0 ");
+	}
+	public static double vector_cos(vector v1, vector v2)
+	{
+		double cos = vector_dot(v1, v2);
+		if(cos != 0.0)
+			cos = (vector_dot(v1, v2))/(Math.sqrt(vector_dot(v1, v1) * vector_dot(v2, v2)));
+		return cos;
+	}
+	public static double vector_dot(vector v1, vector v2)
+	{
+		double sum = 0.0;
+		for(int i=0; i<v1.vec.length; i++)
+		{
+			sum += v1.vec[i] * v2.vec[i];
+		}
+		return sum;
+	}
+	public static void calculate_avg(PrintWriter writer, String[] str, HashMap<String, vector> map)
 	{
 		int count = 0;
 		double[] vec = new double[size];
@@ -108,15 +177,12 @@ public class EmbeddingTrainer
 			}
 			else
 			{
-				System.out.println(str[i]);
+				//System.out.println(str[i]);
 				unnoticed++;
 			}
 		}
 		//System.out.println(count);
-		if(!label.isEmpty())
-			writer.print(id+" "+label+" ");
-		else
-			writer.print(id+" ");
+		
 		for(int i=0; i<vec.length; i++)
 		{
 			if(count != 0)
