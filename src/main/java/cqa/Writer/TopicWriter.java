@@ -14,16 +14,14 @@ import java.util.Collections;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 
-import cqa.Feature_files.Java_files.Similarity_feature_generator;
-
 public class TopicWriter 
 {
-	static double[] f = new double[5]; 
+	static double[] f = new double[7]; 
 	static double[] weights = new double[20];
 	static String[] topic_words = new String[20];
 	public static void main(String args[])
 	{
-		embedding_writer ew = new embedding_writer();
+		EmbeddingWriter ew = new EmbeddingWriter();
 		File file = new File(args[0]);
 		File file2 = new File(args[1]);
 		File file3 = new File(args[2]);
@@ -51,7 +49,6 @@ public class TopicWriter
 			e1.printStackTrace();
 		}
 		PrintWriter writer = null;
-		int q_id_rank = 0;
 		try {
 			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[3], false)));
 		} catch (IOException e) {
@@ -70,6 +67,7 @@ public class TopicWriter
 					String[] spl = line.split("\\s+", 3);
 					vector que_vec = new vector(spl[2]);
 					double posq = findKthLargest(que_vec.vec, 10);
+					int maxq = get_topmax(que_vec.vec);
 					String words = "";
 					String non = "";
 					for(int i=0; i<que_vec.vec.length; i++)
@@ -85,9 +83,7 @@ public class TopicWriter
 					}
 					String l = deDup(words);
 					String l2 = deDup(non);
-					System.out.println(l);
 					line = reader.readLine();
-					q_id_rank++;
 					for(int i=0; i<num; i++)
 					{
 						line = reader.readLine();
@@ -103,15 +99,17 @@ public class TopicWriter
 							spl = line.split("\\s+", 2);
 							ans_vec = new vector(spl[1]);
 						}
+						int maxc = get_topmax(ans_vec.vec);
 						System.out.println(spl[0]+" "+ans_vec.vec.length);
-						f[0] = que_vec.vector_cos(que_vec, ans_vec);
-						f[1] = que_vec.vec_manhattan(que_vec, ans_vec);
-						f[2] = que_vec.Euclidean(que_vec, ans_vec);
+						f[0] = que_vec.vector_cos(que_vec, ans_vec);                         //cosine similarity of topic vectors                    
+						f[1] = que_vec.vec_manhattan(que_vec, ans_vec);                      //manhattan distance of topic vectors
+						f[2] = que_vec.Euclidean(que_vec, ans_vec);                          //euclidean distance of topic vectors
 						f[3] = word_matcher(l, comment);
 						f[4] = word_matcher(l2, comment);
-						double[] mul = que_vec.vector_sub(que_vec, ans_vec);
-						//ew.RankLib_writer(writer, label, q_id_rank, c_id, mul, f);
-						ew.SVM_writer(writer, label, mul, f);
+						f[5] = weights[maxq] * weights[maxc];
+						f[6] = word_matcher(topic_words[maxq], topic_words[maxc]);
+						double[] sub = que_vec.vector_sub(que_vec, ans_vec);
+						ew.SVM_writer(writer, label, sub, f);
 					}
 				}
 				writer.close();

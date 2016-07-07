@@ -22,19 +22,18 @@ public class Writer
 		PrintWriter writer = null;
 		BufferedReader reader = null;
 		BufferedReader reader_2 = null;
-		BufferedReader reader_3 = null;
+		PrintWriter writer2 = null; 
 		File file = new File(args[0]);
 		File file_2 = new File(args[1]);
-		File file_3 = new File(args[2]);
 		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[3], false)));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[2], false)));
+			writer2 = new PrintWriter(new BufferedWriter(new FileWriter(args[3], false)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		try {
 			reader = new BufferedReader(new FileReader(file));
 			reader_2 = new BufferedReader(new FileReader(file_2));
-			reader_3 = new BufferedReader(new FileReader(file_3));
 			try {
 				String str = reader.readLine();
 				do
@@ -43,6 +42,8 @@ public class Writer
 					String q_id = qs[0];
 					int num = Integer.parseInt(qs[1]);
 					String question = reader.readLine();
+					writer2.println(str);
+					writer2.println(question);
 					for(int i=0; i<num; i++)
 					{
 						str = reader.readLine();
@@ -53,8 +54,13 @@ public class Writer
 						String score_line = reader_2.readLine();
 						System.out.println(score_line);
 						splited = score_line.split("\\s+");
-						String score = splited[2];
-						String l = reader_3.readLine();
+						String score = splited[1];
+						String l = splited[0];
+						if(Double.parseDouble(l) != binary_class(label))                  //error analysis
+						{
+							writer2.println(str);
+							writer2.println(comment);
+						}
 						String bin_class = get_class(l);
 						comp_class(label, Double.parseDouble(l), c_id);
 						writer.println(q_id+" "+c_id+" 0 "+score+" "+bin_class);        //scorer script format
@@ -62,17 +68,10 @@ public class Writer
 				}
 				while((str = reader.readLine())!=null);
 				writer.close();
-				System.out.println("bad classified as bad: "+ zisz);
+				writer2.close();
+				System.out.println("bad classified as bad: "+ zisz);                   //misclassified points
 				System.out.println("bad classified as good: "+ ziso);
-//				for(int i=0; i<ziso_arr.size(); i++)
-//				{
-//					System.out.println(ziso_arr.get(i));
-//				}
 				System.out.println("good classified as bad: "+ oisz);
-//				for(int i=0; i<oisz_arr.size(); i++)
-//				{
-//					System.out.println(oisz_arr.get(i));
-//				}
 				System.out.println("good classified as good: "+ oiso);
 			} catch (IOException e) {
 				e.printStackTrace();

@@ -9,15 +9,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class embedding_writer 
+public class EmbeddingWriter 
 {
-	static double[] f = new double[3];
+	static double[] f = new double[4];
 	public static void main(String args[])
 	{
 		File file = new File(args[0]);
 		BufferedReader reader = null;
 		PrintWriter writer = null;
-		int q_id_rank = 0;
 		double cos = 0.0;
 		try {
 			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[1], false)));
@@ -33,19 +32,18 @@ public class embedding_writer
 					String splited[] = line.split("\\s+", 3);
 					int num = Integer.parseInt(splited[1]);
 					vector que_vec = new vector(splited[2]);
-					q_id_rank++;
 					for(int i=0; i<num; i++)
 					{
 						line = reader.readLine();
-						splited = line.split("\\s+", 3);
+						splited = line.split("\\s+", 4);
 						String c_id = splited[0];
 						String label = splited[1];
-						vector ans_vec = new vector(splited[2]);
-						f[0] = que_vec.vector_cos(que_vec, ans_vec);
-						f[1] = que_vec.vec_manhattan(que_vec, ans_vec);
-						f[2] = que_vec.Euclidean(que_vec, ans_vec);
-						double[] sub = que_vec.vector_sub(que_vec, ans_vec);
-						//RankLib_writer(writer, label, q_id_rank, c_id, sub);
+						vector ans_vec = new vector(splited[3]);
+						f[0] = que_vec.vector_cos(que_vec, ans_vec);                           // Cosine similarity of embedding vectors
+						f[1] = que_vec.vec_manhattan(que_vec, ans_vec);                        // Manhattan distance of embedding vectors
+						f[2] = que_vec.Euclidean(que_vec, ans_vec);                            // Euclidean distance of embedding vectors
+						f[3] = Double.parseDouble(splited[2]);
+						double[] sub = que_vec.vector_sub(que_vec, ans_vec);                   // vector subtraction of embedding vectors
 						SVM_writer(writer, label, sub, f);
 					}
 				}
@@ -59,20 +57,6 @@ public class embedding_writer
 			e.printStackTrace();
 		}
 	}
-	public static void RankLib_writer(PrintWriter writer, String label, int q_id_rank, String c_id, double[] vec, double[] f)
-	{
-		int i;
-		writer.print(get_Label_value(label)+" qid:"+q_id_rank+" ");
-		for(i=0; i<vec.length; i++)
-		{
-			writer.print(i+1+":"+vec[i]+" ");
-		}
-		for(i=0; i<f.length; i++)
-		{
-			writer.print(i+1+":"+f[i]+" ");
-		}
-		writer.println(" # "+c_id);
-	}
 	public static void SVM_writer(PrintWriter writer, String label, double[] vec, double[] f)
 	{
 		int i;
@@ -81,9 +65,9 @@ public class embedding_writer
 		{
 			writer.print(i+1+":"+vec[i]+" ");
 		}
-		for(i=0; i<f.length; i++)
+		for(int k=i; k<i+f.length; k++)
 		{
-			writer.print(i+1+":"+f[i]+" ");
+			writer.print(k+1+":"+f[k-i]+" ");
 		}
 		writer.println();
 	}
