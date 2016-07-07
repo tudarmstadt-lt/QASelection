@@ -19,26 +19,9 @@ import java.util.List;
 public class w2vModel 
 {
 	public static Logger log = LoggerFactory.getLogger(w2vModel.class);
-	public static void main(String args[])
+	public static void main(String args[])         
 	{
-//		PrintWriter writer = null;
-//		try {
-//			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[1], false)));
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		File gModel = new File(args[0]);
-//	    try {
-//			WordVectors vec = WordVectorSerializer.loadGoogleModel(gModel, true);
-//			Collection<String> similar = vec.wordsNearest("day", 10);
-//		    writer.println(similar);
-//		    double sim = vec.similarity("people", "money");
-//		    writer.println(sim);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-	   tsne(args[0], args[1]);                        //tsne function call
+	   tsne(args[0], args[1]);                        //tsne function call 
 	}
 	public static void tsne(String input, String output)           //dimensionality reduction code
 	{

@@ -24,7 +24,7 @@ import info.debatty.java.stringsimilarity.NormalizedLevenshtein;
 import info.debatty.java.stringsimilarity.QGram;
 import info.debatty.java.stringsimilarity.SorensenDice;
 
-public class Similarity_feature_generator         //File generating various string features
+public class SimilarityFeatureGenerator         //File generating various string features
 {
 	static double[] f = new double[20];
 	public static void main(String[] args)
@@ -33,12 +33,10 @@ public class Similarity_feature_generator         //File generating various stri
 		BufferedReader reader = null;
 		PrintWriter writer = null;
 		try {
-			//writer = new PrintWriter(new BufferedWriter(new FileWriter("/mnt/Titas/1_QA_MODEL/SemEval_Tasks/CQA/QASelection/src/main/java/cqa/Feature_files/Data_format_files/RankLib/RankLib_test_file.txt", false)));
 			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[1], false)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		int q_id_rank = 0;
 		try {
 			reader = new BufferedReader(new FileReader(file));
 			try {
@@ -49,10 +47,6 @@ public class Similarity_feature_generator         //File generating various stri
 					String q_id = qs[0];
 					int num = Integer.parseInt(qs[1]);
 					String question = reader.readLine();
-					List<String> one_list = maker(question, 1);
-//					List<String> two_list = maker(question, 2);
-//					List<String> three_list = maker(question, 3);
-					q_id_rank++;
 					for(int i=0; i<num; i++)
 					{
 						str = reader.readLine();
@@ -60,9 +54,6 @@ public class Similarity_feature_generator         //File generating various stri
 						String c_id = splited[0];
 						String label = splited[1];
 						String comment = reader.readLine();
-						List<String> aone_list = maker(comment, 1);
-//						List<String> atwo_list = maker(comment, 2);
-//						List<String> athree_list = maker(comment, 3);
 						 f[0] = ngram(question, comment, 1);
 						 f[1] = ngram(question, comment, 2);
 						 f[2] = ngram(question, comment, 3);
@@ -83,12 +74,17 @@ public class Similarity_feature_generator         //File generating various stri
 						 f[17] = Levenshtein(question, comment);
 						 f[18] = NormalizedLevenshtein(question, comment);
 						 f[19] = LCS(question, comment);
-//						 f[20] = matcher(one_list, aone_list)/question.length();
-//						 f[21] = matcher(one_list, aone_list)/comment.length();
+//						 if(question.length() != 0)
+//							 f[20] = matcher(one_list, aone_list)/question.length();
+//						 else
+//							 f[20] = 0.0;
+//						 if(comment.length() != 0)
+//							 f[21] = matcher(one_list, aone_list)/comment.length();
+//						 else
+//							 f[21] = 0.0;
 //						 f[16] = matcher(two_list, atwo_list);
 //						 f[17] = matcher(three_list, athree_list);
-						 RankLib_writer(writer, label, q_id_rank, c_id);
-						 //SVM_writer(writer, label, 1);
+						 SVM_writer(writer, label, 1);
 					}					
 				}
 				while((str = reader.readLine())!=null);
@@ -100,15 +96,6 @@ public class Similarity_feature_generator         //File generating various stri
 			e.printStackTrace();
 		}
 		
-	}
-	public static void RankLib_writer(PrintWriter writer, String label, int q_id_rank, String c_id)  //RankLib File writer
-	{
-		writer.print(get_Label_value(label)+" "+"qid:"+q_id_rank+" ");
-		for(int i=0; i<f.length; i++)
-		{
-			writer.print((i+1)+":"+f[i]+" ");
-		}
-		writer.println("# "+c_id);
 	}
 	public static void SVM_writer(PrintWriter writer, String label, int flag)       //SVM file writer
 	{
@@ -130,11 +117,6 @@ public class Similarity_feature_generator         //File generating various stri
 			}
 			writer.println();
 		}
-	}
-	public static List<String> maker(String s, int n)
-	{
-		Gram gram = new Gram(s, n);
-		return gram.list();
 	}
 	public static double matcher(List<String> que_list, List<String> com_list)
 	{

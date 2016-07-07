@@ -13,7 +13,7 @@ import java.util.List;
 
 public class NGramMatcher 
 {
-	public static double f1 = 0.0, f2=0.0, f3=0.0;
+	public static double f1 = 0.0, f2 = 0.0, f3 = 0.0;
 	public static void main(String args[])
 	{
 		File file = new File(args[0]);
@@ -22,7 +22,6 @@ public class NGramMatcher
 		BufferedReader reader2 = null;
 		PrintWriter writer = null;
 		PrintWriter writer2 = null;
-		int q_id_rank = 0;
 		try {
 			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[2], false)));
 			writer2 = new PrintWriter(new BufferedWriter(new FileWriter(args[3], false)));
@@ -39,7 +38,6 @@ public class NGramMatcher
 						String[] qs = line.split("\\s+");
 						int num = Integer.parseInt(qs[1]);
 						line = reader2.readLine();
-						q_id_rank++;
 						String question = reader.readLine();
 						ArrayList<ArrayList<String>> lp = embedding_maker(reader2, question);      //create list of similar words
 						for(int i=0; i<num; i++)
@@ -54,8 +52,6 @@ public class NGramMatcher
 							f1 = n_gram_generator(lp, lp2, 1);
 							f2 = n_gram_generator(lp, lp2, 2);
 							f3 = n_gram_generator(lp, lp2, 3);
-							//System.out.println(f1+" "+f2+" "+f3);
-							RankLib_writer(writer, label, q_id_rank, c_id);
 							SVM_writer(writer2, label, 1);
 						}
 					}
@@ -70,12 +66,6 @@ public class NGramMatcher
 				e.printStackTrace();
 			}
 	
-		
-	}
-	public static List<String> maker(String s, int n)       //lists for n-grams
-	{
-		Gram gram = new Gram(s, n);
-		return gram.list();
 	}
 	public static int matcher(List<String> que_list, List<String> com_list)   //n-gram count calculation
 	{
@@ -88,10 +78,6 @@ public class NGramMatcher
 			}
 		}
 		return n_gram_count;
-	}
-	public static void RankLib_writer(PrintWriter writer, String label, int q_id_rank, String c_id)
-	{
-		writer.println(get_Label_value(label)+" "+"qid:"+q_id_rank+" 1:"+f1+" 2:"+f2+" 3:"+f3+" # "+c_id);
 	}
 	public static void SVM_writer(PrintWriter writer, String label, int flag)
 	{
@@ -125,7 +111,7 @@ public class NGramMatcher
 	}
 	public static int n_gram_generator(ArrayList<ArrayList<String>> s1, ArrayList<ArrayList<String>> s2, int n)
 	{
-		if(n==1 && s1.size()>0 && s2.size()>0)
+		if(n==1 && s1.size()>0 && s2.size()>0)                           //generate common 1-gram lists
 		{
 			ArrayList<String> oneq = new ArrayList<>();
 			for(int i=0; i<s1.size(); i++)
@@ -146,7 +132,7 @@ public class NGramMatcher
 			oneq.retainAll(onea);
 			return oneq.size();
 		}
-		else if(n==2 && s1.size()>1 && s2.size()>1)
+		else if(n==2 && s1.size()>1 && s2.size()>1)                     //generate common bigram lists
 		{
 			ArrayList<String> oneq = new ArrayList<>();
 			for(int i=0; i<s1.size()-1; i++)
@@ -173,7 +159,7 @@ public class NGramMatcher
 			oneq.retainAll(onea);
 			return oneq.size();
 		}
-		else if(n==3 && s1.size()>2 && s2.size()>2)
+		else if(n==3 && s1.size()>2 && s2.size()>2)                       //generate common trigram lists
 		{
 			ArrayList<String> oneq = new ArrayList<>();
 			for(int i=0; i<s1.size()-2; i++)
@@ -208,7 +194,7 @@ public class NGramMatcher
 		}
 		return 0;
 	}
-	public static ArrayList<ArrayList<String>> embedding_maker(BufferedReader reader2, String s)
+	public static ArrayList<ArrayList<String>> embedding_maker(BufferedReader reader2, String s)              //create dictionary of similar words
 	{
 		String line;
 		int len = 0;
@@ -244,75 +230,5 @@ public class NGramMatcher
 		}
 		return dict;
 	}
-	static void printUtil(ArrayList<ArrayList<String>> strs, String curStr, ArrayList<String> list, int index, int n)
-	{
-		if (index == n)
-		{
-			list.add(curStr);
-		}
-		else
-		{
-			for (int i = 0; i < strs.get(index).size(); i++)
-			{
-			String tmp = curStr;
-			curStr = curStr + " " + strs.get(index).get(i);
-			printUtil(strs, curStr, list, index + 1, n);
-			curStr = tmp;
-			}
-		}
-	}
 
-}
-
-class Gram {																//n-gram generation code
-
-    private final int n;
-    private final String text;
-
-    private final int[] indexes;
-    private int index = -1;
-    private int found = 0;
-
-    public Gram(String text, int n) {
-        this.text = text;
-        this.n = n;
-        indexes = new int[n];
-    }
-
-    private boolean seek() {
-        if (index >= text.length()) {
-            return false;
-        }
-        push();
-        while(++index < text.length()) {
-            if (text.charAt(index) == ' ') {
-                found++;
-                if (found<n) {
-                    push();
-                } else {
-                    return true;
-                }
-            }
-        }
-        return true;
-    }
-
-    private void push() {
-        for (int i = 0; i < n-1; i++) {
-            indexes[i] = indexes[i+1];
-        }
-        indexes[n-1] = index+1;
-    }
-
-    public List<String> list() {
-        List<String> ngrams = new ArrayList<String>();
-        while (seek()) {
-            ngrams.add(get());
-        }
-        return ngrams;
-    }
-
-    private String get() {
-        return text.substring(indexes[0], index);
-    }
 }

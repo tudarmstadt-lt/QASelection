@@ -10,7 +10,7 @@ import java.io.PrintWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Thread_testing
+public class ThreadTesting
 {
 	static double[] f = new double[5];
 	public static void main(String args[])
@@ -23,20 +23,18 @@ public class Thread_testing
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		int q_id_rank = 0;
 		try {
 			reader = new BufferedReader(new FileReader(file));
 			try {
 				String q_id = reader.readLine();
-				String[] good_words = {"get","good","qatar","go","one","visa","also","com","like","doha","need","would","know","try","best","think","http","take","time","al"};            //good class words
-				String[] bad_words = {"get","know","one","thanks","like","qatar","good","would","go","com","http","think","need","also","laugh","laud","time","people","dont","visa"};                //bad class words
-				String[] punc = {"!", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "+", "=", ":", ";", ".", "/", "<", ">", "{", "}", "[", "]", "~", "\\"};
+				String[] good_words = {"get","good","qatar","go","one","visa","also","even","like","doha","need","would","know","try","best","think","work","take","find","people"};            //good class words on train set
+				String[] bad_words = {"get","know","one","thanks","like","qatar","good","would","go","want","dont","think","need","also","much","find","time","people","please","work"};        //bad class words on train set
+				String[] punc = {"!", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "+", "=", ":", ";", ".", "/", "<", ">", "{", "}", "[", "]", "~", "\\"};									//punctuation list
 				do
 				{
 					String[] qs = q_id.split("\\s+");
 					int num = Integer.parseInt(qs[1]);
 					String question = reader.readLine();
-					q_id_rank++;
 					for(int i=0; i<num; i++)
 					{
 						String str = reader.readLine();
@@ -44,15 +42,12 @@ public class Thread_testing
 						String c_id = splited[0];
 						String label = splited[1];
 						String comment = reader.readLine();
-						//System.out.println(comment);
 						f[0] = URL_matcher(comment, c_id) + email_matcher(comment, c_id) + tag_matcher(comment, c_id);
 						f[1] = special_word_matcher(good_words, comment);
 						f[2] = special_word_matcher(bad_words, comment);
 						f[3] = special_character_matcher("?", comment) + special_character_matcher("@", comment)+punc_matcher(punc,comment);
 						f[4] = length_matcher(comment);
-						//arr[5][i] = punc_matcher(punc, comment);
-						RankLib_writer(writer, label, q_id_rank, c_id);
-						//SVM_writer(writer, label, 1);
+						SVM_writer(writer, label, 1);
 					}
 				}
 				while((q_id = reader.readLine())!=null);
@@ -63,15 +58,6 @@ public class Thread_testing
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-	}
-	public static void RankLib_writer(PrintWriter writer, String label, int q_id_rank, String c_id)  //RankLib File writer
-	{
-		writer.print(get_Label_value(label)+" "+"qid:"+q_id_rank+" ");
-		for(int i=0; i<f.length; i++)
-		{
-			writer.print((i+1)+":"+f[i]+" ");
-		}
-		writer.println("# "+c_id);
 	}
 	public static void SVM_writer(PrintWriter writer, String label, int flag)       //SVM file writer
 	{
@@ -160,7 +146,6 @@ public class Thread_testing
 			{
 				if(to_match[i].equals(comm))
 				{
-					//System.out.println(comment);
 					val+=0.1;
 				}
 			}
@@ -172,7 +157,7 @@ public class Thread_testing
 		int count = comment.split(Pattern.quote(to_match), -1).length - 1;
 		return 0.1*count;
 	}
-	public static double punc_matcher(String[] to_match, String comment)
+	public static double punc_matcher(String[] to_match, String comment)                 //match punctuations
 	{
 		int count = 0;
 		for(String punc: to_match)
@@ -181,7 +166,7 @@ public class Thread_testing
 		}
 		return 0.1*count;
 	}
-	public static int begin_matcher(String to_match, String comment)
+	public static int begin_matcher(String to_match, String comment)                     //match beginning words
 	{
 		String[] str = comment.replaceAll("[^a-zA-Z0-9 ]", " ").toLowerCase().split("\\s+");
 		if(str.length > 0 && str[0].equals(to_match))

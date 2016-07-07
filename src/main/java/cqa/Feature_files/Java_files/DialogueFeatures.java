@@ -9,19 +9,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class DialogueFeatures 
+public class DialogueFeatures                                       // Capture if multiple users are in dialogue
 {
 	public static void main(String args[])
 	{
-		File file = new File(args[0]);
+		File file = new File(args[0]);               //input file
 		BufferedReader reader = null;
 		PrintWriter writer = null;
-		int q_id_rank = 0;
 		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[1], false)));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[1], false)));      //output file
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -34,26 +31,24 @@ public class DialogueFeatures
 					String splited[] = line.split("\\s+", 4);
 					int num = Integer.parseInt(splited[1]);
 					String quser = splited[2];
-					String qusername = splited[3];
+					String qusername = splited[3].toLowerCase();
 					ArrayList<String> users = new ArrayList<>();
 					ArrayList<String> labels = new ArrayList<>();
 					ArrayList<String> cid = new ArrayList<>();
 					ArrayList<String> comments = new ArrayList<>();
 					users.add(qusername);
 					line = reader.readLine();
-					q_id_rank++;
 					for(int i=0; i<num; i++)
 					{
 						line = reader.readLine();
 						splited = line.split("\\s+", 4);
 						cid.add(splited[0]);
 						labels.add(splited[1]);
-						users.add(splited[3]);
+						users.add(splited[3].toLowerCase());
 						comments.add(reader.readLine());
 					}
 					ArrayList<Double> f1 = name_dialog(users, comments);
 					ArrayList<Double> f2 = dialog(users, cid);
-					//RankLib_writer(writer, labels, q_id_rank, cid, f1, f2);
 					SVM_writer(writer, labels, f1, f2);
 				}
 				writer.close();
@@ -91,7 +86,7 @@ public class DialogueFeatures
 		}
 		return v1;
 	}
-	public static ArrayList<Double> dialog(ArrayList <String> map, ArrayList<String> cid)               //find users in iterated dialogues
+	public static ArrayList<Double> dialog(ArrayList <String> map, ArrayList<String> cid)               //find users in dialogues by multiplicity of their comments
 	{
 		ArrayList<Double> v2 = new ArrayList<>();
 		ArrayList<String> h = new ArrayList<>();
@@ -111,31 +106,12 @@ public class DialogueFeatures
 		}
 		return v2;
 	}
-	public static void RankLib_writer(PrintWriter writer,ArrayList<String> label, int q_id_rank,ArrayList<String> c_id, ArrayList<Double> v1, ArrayList<Double> v2)  //RankLib File writer
-	{
-		for(int i=0; i<c_id.size(); i++)
-		{
-			writer.println(get_Label_value(label.get(i))+" "+"qid:"+q_id_rank+" 1:"+v1.get(i)+" 2:"+v2.get(i)+" # "+c_id.get(i));
-		}
-	}
 	public static void SVM_writer(PrintWriter writer, ArrayList<String> label, ArrayList<Double> v1, ArrayList<Double> v2)       //SVM file writer
 	{
 		for(int i=0; i<label.size(); i++)
 		{
 			writer.println(binary_class(label.get(i))+" 1:"+v1.get(i)+" 2:"+v2.get(i));
 		}
-	}
-	public static int get_Label_value(String s)                      //Generate multiclass labels
-	{
-		if(s.equals("Good"))
-		{
-			return 1;
-		}
-		else if(s.equals("PotentiallyUseful"))
-		{
-			return 3;
-		}
-		return 2;
 	}
 	public static int binary_class(String s)                     //Generate binary labels
 	{

@@ -31,7 +31,6 @@ public class EmbeddingTrainer
 				{
 					String splited[] = l.split("\\s+", 2);
 					String word = splited[0];
-					//System.out.println(size);
 					vector v = new vector(splited[1]);
 					map.put(word, v);
 				}
@@ -81,7 +80,6 @@ public class EmbeddingTrainer
 						calculate_avg(writer, str, map);
 					}
 				}
-				System.out.println(unnoticed);
 				writer.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -119,7 +117,6 @@ public class EmbeddingTrainer
 						if(pre_cos > max_cos)
 						{
 							max_cos = pre_cos;
-							System.out.println(max_cos);
 						}
 					}
 				}
@@ -127,26 +124,23 @@ public class EmbeddingTrainer
 			}	
 		}
 		double val=0.0;
-		System.out.println(d.size());
 		for(int i=0; i<d.size(); i++)
 		{
-			System.out.print(d.get(i)+" ");
 			val+= d.get(i);
 		}
-		System.out.println();
 		if(!d.isEmpty())
 			writer.print((val/d.size())+" ");
 		else
 			writer.print("0.0 ");
 	}
-	public static double vector_cos(vector v1, vector v2)
+	public static double vector_cos(vector v1, vector v2)                          //cosine score of vectors
 	{
 		double cos = vector_dot(v1, v2);
 		if(cos != 0.0)
 			cos = (vector_dot(v1, v2))/(Math.sqrt(vector_dot(v1, v1) * vector_dot(v2, v2)));
 		return cos;
 	}
-	public static double vector_dot(vector v1, vector v2)
+	public static double vector_dot(vector v1, vector v2)                           //vector dot product
 	{
 		double sum = 0.0;
 		for(int i=0; i<v1.vec.length; i++)
@@ -155,7 +149,7 @@ public class EmbeddingTrainer
 		}
 		return sum;
 	}
-	public static void calculate_avg(PrintWriter writer, String[] str, HashMap<String, vector> map)
+	public static void calculate_avg(PrintWriter writer, String[] str, HashMap<String, vector> map)         //calculate average of word vectors
 	{
 		int count = 0;
 		double[] vec = new double[size];
@@ -177,11 +171,9 @@ public class EmbeddingTrainer
 			}
 			else
 			{
-				//System.out.println(str[i]);
 				unnoticed++;
 			}
 		}
-		//System.out.println(count);
 		
 		for(int i=0; i<vec.length; i++)
 		{
@@ -193,7 +185,7 @@ public class EmbeddingTrainer
 	}
 }
 
-class vector                   //vector class
+class vector                                                                 //vector class
 {
 	double[] vec;
 	public vector(String s)
