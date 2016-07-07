@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-public class multi_file_reader 
+public class MultiFileReader 
 {
 	static ArrayList<Integer> length_pot = new ArrayList<>();
 	static ArrayList<Integer> length_pot_dev = new ArrayList<>();
@@ -19,18 +19,14 @@ public class multi_file_reader
 	public static void main(String args[])
 	{
 		String SVM_dir = args[0];
-		String[] SVM_files_train = {SVM_dir+"S_string.txt", SVM_dir+"S_thread.txt", SVM_dir+"S_topic.txt", SVM_dir+"S_embedding.txt"};
-		String[] SVM_files_dev = {SVM_dir+"S_string_dev.txt", SVM_dir+"S_thread_dev.txt", SVM_dir+"S_topic_dev.txt", SVM_dir+"S_embedding_dev.txt"};
-		String RankLib_dir = args[1];
-		String[] RankLib_files_train = {RankLib_dir+"R_string.txt", RankLib_dir+"R_thread.txt", RankLib_dir+"R_topic.txt", RankLib_dir+"R_embedding.txt"};
-		String[] RankLib_files_dev = {RankLib_dir+"R_string_dev.txt", RankLib_dir+"R_thread_dev.txt", RankLib_dir+"R_topic_dev.txt", RankLib_dir+"R_embedding_dev.txt"};
-		len_cal(args[2], args[3], 0);
-		//multireader(RankLib_files_train, RankLib_dir+"R_total.txt", 0, 231, 0, 0);
-		multireader(SVM_files_train, SVM_dir+"S_total.txt",1, 153, 0, 0);
-		//multireader(RankLib_files_dev, RankLib_dir+"R_total_dev.txt", 0, 231, 0, 1);
-		multireader(SVM_files_dev, SVM_dir+"S_total_dev.txt",1, 153, 0, 1);
+		String[] SVM_files_train = {SVM_dir+"S_string.txt", SVM_dir+"S_thread.txt", SVM_dir+"S_topic.txt", SVM_dir+"S_embedding.txt", SVM_dir+"S_dialog.txt", SVM_dir+"S_meta.txt", SVM_dir+"S_thread3.txt" };
+		String[] SVM_files_dev = {SVM_dir+"S_string_dev.txt", SVM_dir+"S_thread_dev.txt", SVM_dir+"S_topic_dev.txt", SVM_dir+"S_embedding_dev.txt", SVM_dir+"S_dialog_dev.txt", SVM_dir+"S_meta_dev.txt", SVM_dir+"S_thread3_dev.txt"};
+		String[] SVM_files_test = {SVM_dir+"S_string_test.txt", SVM_dir+"S_thread_test.txt", SVM_dir+"S_topic_test.txt", SVM_dir+"S_embedding_test.txt", SVM_dir+"S_dialog_test.txt", SVM_dir+"S_meta_test.txt", SVM_dir+"S_thread3_test.txt"};
+		len_cal(args[1], args[2], 0);
+		multireader(SVM_files_train, SVM_dir+"S_total.txt", 168, 0, 0, 7);
+		multireader(SVM_files_test, SVM_dir+"S_total_test.txt", 168, 0, 1, 7);
 	}
-	public static void multireader(String[] input_dir, String output_file, int flag, int n, int flag1, int flag2)          //combine all data files and normalize
+	public static void multireader(String[] input_dir, String output_file, int n, int flag1, int flag2, int num)          //combine all data files and normalize
 	{
 		ArrayList<Integer> l;
 		if(flag1 == 0)
@@ -55,14 +51,14 @@ public class multi_file_reader
 				l = length_pot_dev;
 			}
 		}
-		BufferedReader[] reader = new BufferedReader[4];
+		BufferedReader[] reader = new BufferedReader[num];
 		PrintWriter writer = null;
 		try {
 			writer = new PrintWriter(new BufferedWriter(new FileWriter(output_file, false)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		for(int i=0; i<4; i++)
+		for(int i=0; i<num; i++)
 		{
 			File file = new File(input_dir[i]);
 			try {
@@ -84,7 +80,7 @@ public class multi_file_reader
 				caller++;
 				int count = 0;
 				int start;
-				for(int i=0; i<4; i++)
+				for(int i=0; i<num; i++)
 				{
 					line = reader[i].readLine();
 					if(line == null)
@@ -93,48 +89,25 @@ public class multi_file_reader
 						break;
 					}
 					String[] splited = line.split("\\s+");
-					if(flag == 0)
+					
+					start = 1;
+					for(int j=start; j<splited.length; j++)
 					{
-						start = 2;
-						for(int j=start; j<splited.length-2; j++)
+						if(j<10)
 						{
-								//System.out.println(splited[j]);
-							if(j<11)
-							{
-								arr[count][caller-1] = Double.parseDouble(splited[j].substring(2));
-							}
-							else if(j < 101)
-							{
-								arr[count][caller-1] = Double.parseDouble(splited[j].substring(3));
-							}
-							else
-							{
-								arr[count][caller-1] = Double.parseDouble(splited[j].substring(4));
-							}
-							count++;
+							arr[count][caller-1] = Double.parseDouble(splited[j].substring(2));
 						}
+						else if(j < 100)
+						{
+							arr[count][caller-1] = Double.parseDouble(splited[j].substring(3));
+						}
+						else
+						{
+							arr[count][caller-1] = Double.parseDouble(splited[j].substring(4));
+						}
+						count++;
 					}
-					else
-					{
-						start = 1;
-						for(int j=start; j<splited.length; j++)
-						{
-							//System.out.println(splited[j]);
-							if(j<10)
-							{
-								arr[count][caller-1] = Double.parseDouble(splited[j].substring(2));
-							}
-							else if(j < 100)
-							{
-								arr[count][caller-1] = Double.parseDouble(splited[j].substring(3));
-							}
-							else
-							{
-								arr[count][caller-1] = Double.parseDouble(splited[j].substring(4));
-							}
-							count++;
-						}
-					}	
+		
 					if(i==0)
 					{
 						labels[caller-1] = Integer.parseInt(splited[0]);
@@ -147,12 +120,7 @@ public class multi_file_reader
 					q_id_rank++;
 					for(int i=0; i<l.get(q_id_rank-1); i++)
 					{
-						if(flag == 0)
-						{
-							writer.print(labels[i]+" qid:"+q_id_rank+" ");
-						}
-						else
-							writer.print(labels[i]+" ");
+						writer.print(labels[i]+" ");
 						for(int j=0; j<n; j++)
 						{
 							writer.print((j+1)+":"+arr[j][i]+" ");
@@ -252,19 +220,11 @@ public class multi_file_reader
 						arr[i][j] = (arr[i][j] - a.getMean())/a.getStdDev();
 				}
 			}
-			
-//			double max = Collections.max(d);
-//			double min = Collections.min(d);
-//			for(int j=0; j<10; j++)
-//			{
-//				if((max - min)!=0)
-//					arr[i][j] = (arr[i][j] - min)/ (max - min);
-//			}
 		}
 	}
 }
 
-class Statistics 
+class Statistics                                                 //zscore normalization of data
 {
     double[] data;
     int size;   
