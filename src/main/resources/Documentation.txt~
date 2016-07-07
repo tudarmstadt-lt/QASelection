@@ -57,33 +57,44 @@ Week 7(20th - 26th June)
 4. Implemented Dialogue features
 5. Ablation test with different kernels in LibSVM and LibLINEAR
 
+Week 8(27th June - 3rd July)
+1. Extended the system to the original test set of SemEval 2016 task
+2. Compared results
+
+Week 9(4th July - 10th July)
+1. Literature review of SemEval 2016 systems
+2. Added metadata features and more thread level features
+3. Ablation test
+4. Cleaned code
+
 Project Analysis
 --------------------------------------------------------------------------
-Major files (Right now)
+Major files
 1. Data Format Files
    Has the data in the required format for different tools used so far. This consists of RankLib, SVM , Mallet and Word2Vec data and the jars required to run them. For SVM, we have separate multiclass and binary classification. For Word2Vec, we have separate Unannotated and Google models.
 2. Readers
-   1) Xml_Reader.java - To read from the XML files and put the data in proper format
-   2) multi_file_reader.java - To combine data format files of different feature files into one for ranking and classification, z-score normalized.
+   1) XmlReader.java - To read from the XML files and put the data in proper format
+   2) MultiFileReader.java - To combine data format files of different feature files into one for ranking and classification, z-score normalized.
    
 3. Writers
    1) Writer.java - Creates the data format files from feature results file after tools are processed.
-   2) embedding_writer.java - Java file to create data format files from word embedding vectors for question and comments.
+   2) EmbeddingWriter.java - Java file to create data format files from word embedding vectors for question and comments.
 4. Java files
-   1) Similarity_feature_generator.java - String similarity fetaures are implemented. Presently has 15 string similarity features including n-gram, cosine similarity, Jaccard, Levenshtein, SorensenDice, Damerau, JaroWinkler, QGram, Longest Common Subsequence.
-   2) Thread_testing.java - Has 5 thread level binary features including presence of URLs, emails, special words, length features and question identification.
+   1) SimilarityFeatureGenerator.java - String similarity fetaures are implemented. Presently has 15 string similarity features including n-gram, cosine similarity, Jaccard, Levenshtein, SorensenDice, Damerau, JaroWinkler, QGram, Longest Common Subsequence.
+   2) ThreadTesting.java - Has 5 thread level binary features including presence of URLs, emails, special words, length features and question identification.
    3) EmbeddingTrainer.java - Java file to generate sentence vectors from word vectors from word2vec.
    4) word2vec.java - Get top words similar to each word in training/dev set.
    5) word2vecTraining.java - Java file for word2vec vector and model generation.
    6) w2vModel.java - Java file for dimensionality reduction using tsne.
-   7) User_Features.java - Has stopword removal methods for training and test data. Has a wordcount and list of most common words representing a class.
+   7) UserFeatures.java - Has stopword removal methods for training and test data. Has a wordcount and list of most common words representing a class.
    8) NGramMatcher.java - Find common n-grams between question and comment on extended wordlist using statistical paraphrasing.
    9) DialogueFeatures.java - Dialogue features implemented for intercomment similarity measures and dialogue identification.
-   
+   10) ThreadLevelUsers.java - Has 5 binary features identifying if a comment by the asker of the question has an acknowledgement, is a question or not.
+   11) ThreadLevelProximity.java - Has numerical features computing the distance between next comment by the asker and the present comment (4 features).
+   12) MetaFeatures.java - Has Metadata features capturing comment position, acknowledgment and number of words per comment.
 Other files
 ------------------------------------------------------------------------
    Ablation_test.txt - Has the results of Ablation test.
-   users_each_thread.txt - Another supporting file for data analysis.
    Documentation.txt - The Documentation of the project.
 
 Scripts used
@@ -97,8 +108,3 @@ check.py - Python file to clean all datasets. The methods include
 grid.py - Tune SVM parameters for classification. 
 google.py - generate sentence vectors using Gensim word2vec from Google News dataset.
 
-Old files 
-------------------------------------------------------------------------
-1) Thread_level_users.java - Has 5 binary features identifying if a comment by the asker of the question has an acknowledgement, is a question or not.
-2) Thread_level_proximity.java - Has numerical features computing the distance between next comment by the asker and the present comment (4 features).
-3) multiple_file_reader.java - To combine data format files of different feature files into one for ranking and classification,not normalized.
