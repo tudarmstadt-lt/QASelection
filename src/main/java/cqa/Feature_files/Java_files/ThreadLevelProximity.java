@@ -116,7 +116,7 @@ public class ThreadLevelProximity
 					}
 				}
 			}
-			writer.println(thread.binary_class(arr3[i])+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4);
+			writer.println(thread.get_Label_value(arr3[i])+" 1:"+f_1+" 2:"+f_2+" 3:"+f_3+" 4:"+f_4);
 		}
 	}
 	public static double vicinity_ack( String asker, String commenter, String comment, int k)     //among comments following c there is one by asker with an ack

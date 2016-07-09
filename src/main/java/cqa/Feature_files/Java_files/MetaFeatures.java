@@ -50,7 +50,7 @@ public class MetaFeatures                                      //Meta Data Featu
 							f[3] = special_word_matcher(ack2, comment);
 							f[4] = check_commentor(spl[0],"yes");
 							f[5] = spl.length;
-							SVM_writer(writer, label, 1);
+							SVM_writer(writer, label, 0);
 						}
 					}
 				} catch (IOException e) {

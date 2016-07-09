@@ -110,7 +110,7 @@ public class DialogueFeatures                                       // Capture i
 	{
 		for(int i=0; i<label.size(); i++)
 		{
-			writer.println(binary_class(label.get(i))+" 1:"+v1.get(i)+" 2:"+v2.get(i));
+			writer.println(get_Label_value(label.get(i))+" 1:"+v1.get(i)+" 2:"+v2.get(i));
 		}
 	}
 	public static int binary_class(String s)                     //Generate binary labels
@@ -123,5 +123,17 @@ public class DialogueFeatures                                       // Capture i
 		{
 			return 0;
 		}
+	}
+	public static int get_Label_value(String s)
+	{
+		if(s.equals("Good"))
+		{
+			return 1;
+		}
+		else if(s.equals("PotentiallyUseful"))
+		{
+			return 3;
+		}
+		return 2;
 	}
 }

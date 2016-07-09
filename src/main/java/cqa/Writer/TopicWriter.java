@@ -83,7 +83,7 @@ public class TopicWriter
 					}
 					String l = deDup(words);
 					String l2 = deDup(non);
-					line = reader.readLine();
+					String question = reader.readLine();
 					for(int i=0; i<num; i++)
 					{
 						line = reader.readLine();
@@ -100,14 +100,31 @@ public class TopicWriter
 							ans_vec = new vector(spl[1]);
 						}
 						int maxc = get_topmax(ans_vec.vec);
+						double posa = findKthLargest(ans_vec.vec, 10);
+						words = "";
+						non = "";
+						for(int j=0; j<ans_vec.vec.length; j++)
+						{
+							if(ans_vec.vec[j] >= posa)
+							{
+								words += topic_words[j]+" ";
+							}
+							else
+							{
+								non += topic_words[j]+" ";
+							}
+						}
+						String al = deDup(words);
+						String al2 = deDup(non);
 						System.out.println(spl[0]+" "+ans_vec.vec.length);
 						f[0] = que_vec.vector_cos(que_vec, ans_vec);                         //cosine similarity of topic vectors                    
 						f[1] = que_vec.vec_manhattan(que_vec, ans_vec);                      //manhattan distance of topic vectors
 						f[2] = que_vec.Euclidean(que_vec, ans_vec);                          //euclidean distance of topic vectors
 						f[3] = word_matcher(l, comment);
 						f[4] = word_matcher(l2, comment);
-						f[5] = weights[maxq] * weights[maxc];
-						f[6] = word_matcher(topic_words[maxq], topic_words[maxc]);
+						//f[5] = word_matcher(topic_words[maxq], topic_words[maxc]);
+						f[5] = word_matcher(l,al);
+						f[6] = word_matcher(l2,al2);
 						double[] sub = que_vec.vector_sub(que_vec, ans_vec);
 						ew.SVM_writer(writer, label, sub, f);
 					}

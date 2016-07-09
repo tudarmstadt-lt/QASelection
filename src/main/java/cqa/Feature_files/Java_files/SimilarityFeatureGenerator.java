@@ -84,7 +84,7 @@ public class SimilarityFeatureGenerator         //File generating various string
 //							 f[21] = 0.0;
 //						 f[16] = matcher(two_list, atwo_list);
 //						 f[17] = matcher(three_list, athree_list);
-						 SVM_writer(writer, label, 1);
+						 SVM_writer(writer, label, 0);
 					}					
 				}
 				while((str = reader.readLine())!=null);

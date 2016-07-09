@@ -47,7 +47,7 @@ public class ThreadTesting
 						f[2] = special_word_matcher(bad_words, comment);
 						f[3] = special_character_matcher("?", comment) + special_character_matcher("@", comment)+punc_matcher(punc,comment);
 						f[4] = length_matcher(comment);
-						SVM_writer(writer, label, 1);
+						SVM_writer(writer, label, 0);
 					}
 				}
 				while((q_id = reader.readLine())!=null);
