@@ -1,7 +1,4 @@
-package cqa.Feature_files.Java_files;
-
-
-
+package cqa.core;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.BufferedReader;
@@ -10,9 +7,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
+import cqa.writer.SVMWriter;
 import info.debatty.java.stringsimilarity.Cosine;
 import info.debatty.java.stringsimilarity.Damerau;
 import info.debatty.java.stringsimilarity.Jaccard;
@@ -24,6 +20,11 @@ import info.debatty.java.stringsimilarity.NormalizedLevenshtein;
 import info.debatty.java.stringsimilarity.QGram;
 import info.debatty.java.stringsimilarity.SorensenDice;
 
+/**
+ * This class calculates string similarity measures between question and comment
+ * @author titas
+ *
+ */
 public class SimilarityFeatureGenerator         //File generating various string features
 {
 	static double[] f = new double[20];
@@ -74,17 +75,8 @@ public class SimilarityFeatureGenerator         //File generating various string
 						 f[17] = Levenshtein(question, comment);
 						 f[18] = NormalizedLevenshtein(question, comment);
 						 f[19] = LCS(question, comment);
-//						 if(question.length() != 0)
-//							 f[20] = matcher(one_list, aone_list)/question.length();
-//						 else
-//							 f[20] = 0.0;
-//						 if(comment.length() != 0)
-//							 f[21] = matcher(one_list, aone_list)/comment.length();
-//						 else
-//							 f[21] = 0.0;
-//						 f[16] = matcher(two_list, atwo_list);
-//						 f[17] = matcher(three_list, athree_list);
-						 SVM_writer(writer, label, 0);
+						 SVMWriter w = new SVMWriter(writer, label, 1, f);
+						 w.write();
 					}					
 				}
 				while((str = reader.readLine())!=null);
@@ -94,65 +86,15 @@ public class SimilarityFeatureGenerator         //File generating various string
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		}
-		
+		}	
 	}
-	public static void SVM_writer(PrintWriter writer, String label, int flag)       //SVM file writer
-	{
-		if(flag == 0)
-		{
-			writer.print(get_Label_value(label)+" ");
-			for(int i=0; i<f.length; i++)
-			{
-				writer.print((i+1)+":"+f[i]+" ");
-			}
-			writer.println();
-		}
-		else
-		{
-			writer.print(binary_class(label)+" ");
-			for(int i=0; i<f.length; i++)
-			{
-				writer.print((i+1)+":"+f[i]+" ");
-			}
-			writer.println();
-		}
-	}
-	public static double matcher(List<String> que_list, List<String> com_list)
-	{
-		int n_gram_count = 0;
-		for(int j=0; j<que_list.size(); j++)
-		{
-			if(!que_list.get(j).isEmpty() && com_list.contains(que_list.get(j)))
-			{
-				n_gram_count++;
-			}
-		}
-		return n_gram_count*1.0;
-	}
-	public static int get_Label_value(String s)                      //Generate multiclass labels
-	{
-		if(s.equals("Good"))
-		{
-			return 1;
-		}
-		else if(s.equals("PotentiallyUseful"))
-		{
-			return 3;
-		}
-		return 2;
-	}
-	public static int binary_class(String s)                     //Generate binary labels
-	{
-		if(s.equals("Good"))
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
+	/**
+	 * All the subsequent methods create objects for string similarity computations 
+	 * @param s1: first string (typically question)
+	 * @param s2: second string (typically answer)
+	 * @param n: for n-grams
+	 * @return distance or similarity score
+	 */
 	public static double ngram(String s1, String s2, int n)        //ngram score
 	{
 		NGram ngram = new NGram(n);

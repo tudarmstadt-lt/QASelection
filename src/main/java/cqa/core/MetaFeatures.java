@@ -1,4 +1,4 @@
-package cqa.Feature_files.Java_files;
+package cqa.core;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -8,8 +8,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-
+import cqa.writer.SVMWriter;
+/**
+ * This class calculates MetaData features like if asker answered in a comment, comment position or acknowledgement in comments
+ * @author titas
+ *
+ */
 public class MetaFeatures                                      //Meta Data Features
 {
 	static double[] f = new double[6];
@@ -45,12 +49,13 @@ public class MetaFeatures                                      //Meta Data Featu
 							String comment = reader.readLine();
 							String[] spl = comment.split("\\s+");
 							f[0] = (num-i)*1.0/num;
-							f[1] = check_commentor(quser, cuser);
+							f[1] = check_same(quser, cuser);
 							f[2] = special_word_matcher(ack, comment);
 							f[3] = special_word_matcher(ack2, comment);
-							f[4] = check_commentor(spl[0],"yes");
+							f[4] = check_same(spl[0],"yes");
 							f[5] = spl.length;
-							SVM_writer(writer, label, 0);
+							SVMWriter w = new SVMWriter(writer, label, 1, f);
+							w.write();
 						}
 					}
 				} catch (IOException e) {
@@ -63,13 +68,25 @@ public class MetaFeatures                                      //Meta Data Featu
 				e.printStackTrace();
 			}
 	}
-	public static double check_commentor(String s1, String s2)
+	/**
+	 * This method simply calculates if two strings are same
+	 * @param s1: first string
+	 * @param s2: second string
+	 * @return 1.0 or 0.0
+	 */
+	public static double check_same(String s1, String s2)
 	{
 		if(s1.equals(s2))
 			return 1.0;
 		else
 			return 0.0;
 	}
+	/**
+	 * Matches words from a list in a target sentence
+	 * @param to_match: List of words to match
+	 * @param comment: comment in which we find the matched words
+	 * @return number of matches
+	 */
 	public static double special_word_matcher(String[] to_match, String comment)           //match special words
 	{
 		String[] str = comment.replaceAll("[^a-zA-Z0-9 ]", " ").toLowerCase().split("\\s+");
@@ -85,49 +102,5 @@ public class MetaFeatures                                      //Meta Data Featu
 			}
 		}
 		return val;
-	}
-	public static void SVM_writer(PrintWriter writer, String label, int flag)       //SVM file writer
-	{
-		if(flag == 0)
-		{
-			writer.print(get_Label_value(label)+" ");
-			for(int i=0; i<f.length; i++)
-			{
-				writer.print((i+1)+":"+f[i]+" ");
-			}
-			writer.println();
-		}
-		else
-		{
-			writer.print(binary_class(label)+" ");
-			for(int i=0; i<f.length; i++)
-			{
-				writer.print((i+1)+":"+f[i]+" ");
-			}
-			writer.println();
-		}
-	}
-	public static int get_Label_value(String s)                      //Generate multiclass labels
-	{
-		if(s.equals("Good"))
-		{
-			return 1;
-		}
-		else if(s.equals("PotentiallyUseful"))
-		{
-			return 3;
-		}
-		return 2;
-	}
-	public static int binary_class(String s)                     //Generate binary labels
-	{
-		if(s.equals("Good"))
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
 	}
 }

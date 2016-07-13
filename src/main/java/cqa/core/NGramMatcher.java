@@ -1,4 +1,4 @@
-package cqa.Feature_files.Java_files;
+package cqa.core;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,9 +11,15 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import cqa.writer.SVMWriter;
+/**
+ * This class does n(1,2,3) gram matching between question and comment on an extended wordlist of top 10 similar words from Word2Vec
+ * @author titas
+ *
+ */
 public class NGramMatcher 
 {
-	public static double f1 = 0.0, f2 = 0.0, f3 = 0.0;
+	static double[] f = new double[3];
 	public static void main(String args[])
 	{
 		File file = new File(args[0]);
@@ -49,10 +55,11 @@ public class NGramMatcher
 							str = reader2.readLine();
 							String comment = reader.readLine();
 							ArrayList<ArrayList<String>> lp2 = embedding_maker(reader2, comment);
-							f1 = n_gram_generator(lp, lp2, 1);
-							f2 = n_gram_generator(lp, lp2, 2);
-							f3 = n_gram_generator(lp, lp2, 3);
-							SVM_writer(writer2, label, 1);
+							f[0] = n_gram_generator(lp, lp2, 1);
+							f[1] = n_gram_generator(lp, lp2, 2);
+							f[2] = n_gram_generator(lp, lp2, 3);
+							SVMWriter w = new SVMWriter(writer, label, 1, f);
+							w.write();
 						}
 					}
 				} catch (IOException e) {
@@ -67,48 +74,13 @@ public class NGramMatcher
 			}
 	
 	}
-	public static int matcher(List<String> que_list, List<String> com_list)   //n-gram count calculation
-	{
-		int n_gram_count = 0;
-		for(int j=0; j<que_list.size(); j++)
-		{
-			if(com_list.contains(que_list.get(j)) && !que_list.get(j).isEmpty())
-			{
-				n_gram_count++;
-			}
-		}
-		return n_gram_count;
-	}
-	public static void SVM_writer(PrintWriter writer, String label, int flag)
-	{
-		if(flag == 0)
-			writer.println(get_Label_value(label)+" 1:"+f1+" 2:"+f2+" 3:"+f3);
-		else
-			writer.println(binary_class(label)+" 1:"+f1+" 2:"+f2+" 3:"+f3);
-	}
-	public static int get_Label_value(String s)
-	{
-		if(s.equals("Good"))
-		{
-			return 1;
-		}
-		else if(s.equals("PotentiallyUseful"))
-		{
-			return 3;
-		}
-		return 2;
-	}
-	public static int binary_class(String s)
-	{
-		if(s.equals("Good"))
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
+	/**
+	 * Generates ngrams on extended wordlist
+	 * @param s1: The extended wordlist for the question string
+	 * @param s2: The extended wordlist for the comment string
+	 * @param n: n can be 1,2,3
+	 * @return The number of common ngrams
+	 */
 	public static int n_gram_generator(ArrayList<ArrayList<String>> s1, ArrayList<ArrayList<String>> s2, int n)
 	{
 		if(n==1 && s1.size()>0 && s2.size()>0)                           //generate common 1-gram lists
@@ -194,6 +166,12 @@ public class NGramMatcher
 		}
 		return 0;
 	}
+	/**
+	 * Creates a list of similar words for each word in a given target string
+	 * @param reader2: Reader to read the file of similar words
+	 * @param s: String to tokenize
+	 * @return An ArrayList of similar words for each word in the sentence
+	 */
 	public static ArrayList<ArrayList<String>> embedding_maker(BufferedReader reader2, String s)              //create dictionary of similar words
 	{
 		String line;

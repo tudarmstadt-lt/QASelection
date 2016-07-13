@@ -1,4 +1,4 @@
-package cqa.Feature_files.Java_files;
+package cqa.core;
 
 import java.io.BufferedWriter;
 import java.io.File;

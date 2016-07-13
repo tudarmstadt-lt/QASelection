@@ -1,4 +1,4 @@
-package cqa.Writer;
+package cqa.writer;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -8,7 +8,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-
+/**
+ * This class calculates embedding features from sentence vectors like cosine similarity, manhattan and euclidean distance of embeddings 
+ * @author titas
+ *
+ */
 public class EmbeddingWriter 
 {
 	static double[] f = new double[4];
@@ -95,7 +99,11 @@ public class EmbeddingWriter
 		}
 	}
 }
-
+/**
+ * This class does all the vector operations on these embedding vectors like cosine, dot product, vector subtraction, and various distance metrics
+ * @author titas
+ *
+ */
 class vector                                //find scoring vectors and cosine of question and comment vectors
 {
 	double[] vec;

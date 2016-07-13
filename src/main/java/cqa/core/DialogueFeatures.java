@@ -1,4 +1,4 @@
-package cqa.Feature_files.Java_files;
+package cqa.core;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,7 +9,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-
+/**
+ * This class identifies comments that might be dialogues between different users
+ * @author titas
+ *
+ */
 public class DialogueFeatures                                       // Capture if multiple users are in dialogue
 {
 	public static void main(String args[])
@@ -61,7 +65,12 @@ public class DialogueFeatures                                       // Capture i
 			e.printStackTrace();
 		}
 	}
-	
+	/**
+	 * This method identifies comments where users explicitly mention another user by username
+	 * @param map: ArrayList of usernames in the thread
+	 * @param comments: List of comments in the thread
+	 * @return Returns an ArrayList of values with 1.0 for comments with this property 
+	 */
 	public static ArrayList<Double> name_dialog(ArrayList<String> map, ArrayList<String> comments)  //find users in dialogue by name
 	{
 		ArrayList<Double> v1 = new ArrayList<Double>();
@@ -86,6 +95,12 @@ public class DialogueFeatures                                       // Capture i
 		}
 		return v1;
 	}
+	/**
+	 * This method identifies dialogues considering repeated comments by the same user in a thread
+	 * @param map: ArrayList of usernames in the thread
+	 * @param cid: List of comment ids in the thread
+	 * @return Returns an ArrayList of values with 1.0 for comments having this property
+	 */
 	public static ArrayList<Double> dialog(ArrayList <String> map, ArrayList<String> cid)               //find users in dialogues by multiplicity of their comments
 	{
 		ArrayList<Double> v2 = new ArrayList<>();
@@ -106,6 +121,13 @@ public class DialogueFeatures                                       // Capture i
 		}
 		return v2;
 	}
+	/**
+	 * This method writes an SVM file from the features
+	 * @param writer: Writer object
+	 * @param label: Labels of the class
+	 * @param v1: List of feature values
+	 * @param v2: List of feature values
+	 */
 	public static void SVM_writer(PrintWriter writer, ArrayList<String> label, ArrayList<Double> v1, ArrayList<Double> v2)       //SVM file writer
 	{
 		for(int i=0; i<label.size(); i++)
@@ -124,7 +146,7 @@ public class DialogueFeatures                                       // Capture i
 			return 0;
 		}
 	}
-	public static int get_Label_value(String s)
+	public static int get_Label_value(String s)                  //Generate multiclass labels
 	{
 		if(s.equals("Good"))
 		{

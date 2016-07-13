@@ -1,4 +1,4 @@
-package cqa.Writer;
+package cqa.writer;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.BufferedReader;
@@ -8,6 +8,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+/**
+ * This class writes the SVM classification scores and labels in the format of the scorer script for SemEval 2016
+ * @author titas
+ *
+ */
 public class Writer 
 {
 	static int oiso = 0;
@@ -52,7 +57,6 @@ public class Writer
 						String label = splited[1];
 						String comment = reader.readLine();
 						String score_line = reader_2.readLine();
-						System.out.println(score_line);
 						splited = score_line.split("\\s+");
 						String score = splited[1];
 						String l = splited[0];
@@ -80,6 +84,12 @@ public class Writer
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * This method calculates misclassifications by the classifier
+	 * @param gold: the gold label
+	 * @param predict: the predicted label
+	 * @param c_id: comment id
+	 */
 	public static void comp_class(String gold, double predict, String c_id)      //find misclassified comments
 	{
 		if(predict == 0.0)
@@ -104,6 +114,7 @@ public class Writer
 			}
 		}
 	}
+	
 	public static double binary_class(String s)
 	{
 		if(s.equals("Good"))
@@ -115,12 +126,11 @@ public class Writer
 			return 0.0;
 		}
 	}
-	public static String get_bool(String s)
-	{
-		if(Double.parseDouble(s) == 0.0)
-			return "false";
-		return "true";
-	}
+	/**
+	 * This method returns "true" if classification label was 1.0 else "false"
+	 * @param s: the input label
+	 * @return a String "true" or "false"
+	 */
 	public static String get_class(String s)
 	{
 		if(Double.parseDouble(s) == 1.0)

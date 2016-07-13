@@ -1,4 +1,4 @@
-package cqa.Feature_files.Java_files;
+package cqa.core;
 
 import org.deeplearning4j.models.embeddings.WeightLookupTable;
 import org.deeplearning4j.models.embeddings.inmemory.InMemoryLookupTable;
@@ -14,12 +14,9 @@ import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 import java.io.File;
 
 /**
- * This is simple example for model weights update after initial vocab building.
- * If you have built your w2v model, and some time later you've decided that it can be additionally trained over new corpus, here's an example how to do it.
+ * This class trains a word2vec model on provided data and writes word vectors and model to a separate files
+ * @author titas
  *
- * PLEASE NOTE: At this moment, no new words will be added to vocabulary/model. Only weights update process will be issued. It's often called "frozen vocab training".
- *
- * @author raver119@gmail.com
  */
 public class word2vecTraining {
 
@@ -54,6 +51,6 @@ public class word2vecTraining {
                 .build();
         vec.fit();
         WordVectorSerializer.writeWordVectors(vec, args[1]);         //write word vectors
-        //WordVectorSerializer.writeFullModel(vec, args[1]);         //write model
+        WordVectorSerializer.writeFullModel(vec, args[1]);         //write model
     }
 }

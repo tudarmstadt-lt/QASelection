@@ -1,4 +1,4 @@
-package cqa.Xml_reader;
+package cqa.reader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -10,19 +10,33 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
+/**
+ * This file parses XML input file and converts it into a format easy to read from
+ * @author titas
+ *
+ */
 public class XmlReader                    // File for reading XML files 
 {
 	public static void main(String args[])    
 	{
-		File inputFile = new File(args[0]);
-		SAXReader reader = new SAXReader();
+		parse(args[0], args[1]);
 		get_users(args[0], args[1]);
+	}
+	/**
+	 * This method parses the input file using dom4j XML reader
+	 * @param input: input XML file
+	 * @param output: output parsed file
+	 */
+	public static void parse(String input, String output)
+	{
+		File inputFile = new File(input);
+		SAXReader reader = new SAXReader();
 		try {
 			Document document = reader.read(inputFile);
 			List<Node> nodes = document.selectNodes("xml/Thread");         //read XML file
 			PrintWriter writer = null;
 			try {
-				writer = new PrintWriter(new BufferedWriter(new FileWriter(args[1], false)));
+				writer = new PrintWriter(new BufferedWriter(new FileWriter(output, false)));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -57,6 +71,11 @@ public class XmlReader                    // File for reading XML files
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * This method does additional parsing having user information
+	 * @param input: input file
+	 * @param output: output file
+	 */
 	public static void get_users(String input, String output)                     //get user information from XML file          
     {
 		File inputFile = new File(input);

@@ -1,4 +1,4 @@
-package cqa.Feature_files.Java_files;
+package cqa.core;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,14 +15,23 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * This class does dimensionality reduction of word embedding vectors using tsne-dimensionality reduction.
+ * @author titas
+ *
+ */
 public class w2vModel 
 {
 	public static Logger log = LoggerFactory.getLogger(w2vModel.class);
 	public static void main(String args[])         
 	{
-	   tsne(args[0], args[1]);                        //tsne function call 
+	   tsne(args[0], args[1]);                                     //tsne function call 
 	}
+	/**
+	 * This method is the dimensionality reduction code
+	 * @param input: input file having higher dimension word vectors
+	 * @param output: output file having reduced dimension word vectors
+	 */
 	public static void tsne(String input, String output)           //dimensionality reduction code
 	{
         Nd4j.dtype = DataBuffer.Type.DOUBLE;
@@ -54,7 +63,6 @@ public class w2vModel
 
 	        log.info("Store TSNE Coordinates for Plotting....");
 	        String outputFile = output;
-	        //(new File(outputFile)).getParentFile().mkdirs();
 	        tsne.plot(weights,2,cacheList,outputFile);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

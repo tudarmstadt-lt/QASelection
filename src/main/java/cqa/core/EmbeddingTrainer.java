@@ -1,4 +1,4 @@
-package cqa.Feature_files.Java_files;
+package cqa.core;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,13 +10,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-
-
+/**
+ * This class creates sentence vectors from trained word embeddings by Word2Vec
+ * @author titas
+ *
+ */
 public class EmbeddingTrainer 
 {
-	static int size = 100;
-	static int unnoticed = 0;
+	static int size = 100;              //word vector dimension
 	public static void main(String args[])
 	{
 		File file = new File(args[0]);
@@ -42,10 +43,14 @@ public class EmbeddingTrainer
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-		
+		}		
 	}
+	/**
+	 * This class creates sentence vectors from word vectors by averaging word vectors per sentence
+	 * @param map: HashMap of word and its word vector
+	 * @param fread: input file to read
+	 * @param fwrite: file to write
+	 */
 	public static void sentence_vector(HashMap<String, vector> map, String fread, String fwrite)
 	{
 		File file = new File(fread);
@@ -76,7 +81,7 @@ public class EmbeddingTrainer
 						String comment = reader.readLine();
 						str = comment.split("\\s+");
 						init(writer, c_id, label);
-						trans(writer, map, question, comment);
+						translation(writer, map, question, comment);
 						calculate_avg(writer, str, map);
 					}
 				}
@@ -97,7 +102,14 @@ public class EmbeddingTrainer
 		else
 			writer.print(id+" ");
 	}
-	public static void trans(PrintWriter writer, HashMap<String, vector> map, String ques, String ans)
+	/**
+	 * This method calculates a translation score by aligning words with maximum cosine similarity 
+	 * @param writer: Writer object
+	 * @param map: Map of word embeddings
+	 * @param ques: question string
+	 * @param ans: comment string
+	 */
+	public static void translation(PrintWriter writer, HashMap<String, vector> map, String ques, String ans)
 	{
 		String[] que_list = ques.split("\\s+");
 		String[] ans_list = ans.split("\\s+");
@@ -133,6 +145,12 @@ public class EmbeddingTrainer
 		else
 			writer.print("0.0 ");
 	}
+	/**
+	 * This method finds the cosine of two given vectors
+	 * @param v1: question vector
+	 * @param v2: comment vector
+	 * @return The cosine value
+	 */
 	public static double vector_cos(vector v1, vector v2)                          //cosine score of vectors
 	{
 		double cos = vector_dot(v1, v2);
@@ -140,6 +158,12 @@ public class EmbeddingTrainer
 			cos = (vector_dot(v1, v2))/(Math.sqrt(vector_dot(v1, v1) * vector_dot(v2, v2)));
 		return cos;
 	}
+	/**
+	 * This method calculates the dot product of two vectors
+	 * @param v1: question vector
+	 * @param v2: comment vector
+	 * @return Dot product of vectors
+	 */
 	public static double vector_dot(vector v1, vector v2)                           //vector dot product
 	{
 		double sum = 0.0;
@@ -169,10 +193,6 @@ public class EmbeddingTrainer
 					vec[j]+=v.vec[j];
 				}
 			}
-			else
-			{
-				unnoticed++;
-			}
 		}
 		
 		for(int i=0; i<vec.length; i++)
@@ -184,7 +204,11 @@ public class EmbeddingTrainer
 		writer.println();
 	}
 }
-
+/**
+ * This class creates a vector object from word embedding values
+ * @author titas
+ *
+ */
 class vector                                                                 //vector class
 {
 	double[] vec;

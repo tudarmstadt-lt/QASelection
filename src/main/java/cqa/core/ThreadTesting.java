@@ -1,4 +1,4 @@
-package cqa.Feature_files.Java_files;
+package cqa.core;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.BufferedReader;
@@ -10,6 +10,12 @@ import java.io.PrintWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cqa.writer.SVMWriter;
+/**
+ * This class calculates many thread level features including presence of URLs, emails or HTML tags, length of comment, punctuations and words typically present in good and bad comments
+ * @author titas
+ *
+ */
 public class ThreadTesting
 {
 	static double[] f = new double[5];
@@ -47,7 +53,8 @@ public class ThreadTesting
 						f[2] = special_word_matcher(bad_words, comment);
 						f[3] = special_character_matcher("?", comment) + special_character_matcher("@", comment)+punc_matcher(punc,comment);
 						f[4] = length_matcher(comment);
-						SVM_writer(writer, label, 0);
+						SVMWriter w = new SVMWriter(writer, label, 1, f);
+						w.write();
 					}
 				}
 				while((q_id = reader.readLine())!=null);
@@ -59,50 +66,12 @@ public class ThreadTesting
 			e.printStackTrace();
 		}
 	}
-	public static void SVM_writer(PrintWriter writer, String label, int flag)       //SVM file writer
-	{
-		if(flag == 0)
-		{
-			writer.print(get_Label_value(label)+" ");
-			for(int i=0; i<f.length; i++)
-			{
-				writer.print((i+1)+":"+f[i]+" ");
-			}
-			writer.println();
-		}
-		else
-		{
-			writer.print(binary_class(label)+" ");
-			for(int i=0; i<f.length; i++)
-			{
-				writer.print((i+1)+":"+f[i]+" ");
-			}
-			writer.println();
-		}
-	}
-	public static int get_Label_value(String s)
-	{
-		if(s.equals("Good"))
-		{
-			return 1;
-		}
-		else if(s.equals("PotentiallyUseful"))
-		{
-			return 3;
-		}
-		return 2;
-	}
-	public static int binary_class(String s)
-	{
-		if(s.equals("Good"))
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
+	/**
+	 * This method matches URLs if any in the comments
+	 * @param comment: comment string
+	 * @param c_id: comment ids
+	 * @return a value indicating number of URLs
+	 */
 	public static double URL_matcher(String comment, String c_id)                     //match URLs
 	{
 		Pattern p = Pattern.compile("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]",Pattern.CASE_INSENSITIVE);
@@ -115,6 +84,12 @@ public class ThreadTesting
         }
         return val;
 	}
+	/**
+	 * This method matches emails if any in the comments
+	 * @param comment: comment string
+	 * @param c_id: comment ids
+	 * @return a value indicating number of emails
+	 */
 	public static double email_matcher(String comment, String c_id)                  //match emails
 	{
 		Matcher m = Pattern.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+").matcher(comment);
@@ -125,6 +100,12 @@ public class ThreadTesting
         }
         return val;
 	}
+	/**
+	 * This method matches HTML tags if any in the comments
+	 * @param comment: comment string
+	 * @param c_id: comment ids
+	 * @return a value indicating number of HTML tags
+	 */
 	public static double tag_matcher(String comment, String c_id)
 	{
 		
@@ -136,6 +117,12 @@ public class ThreadTesting
         }
         return val;
 	}
+	/**
+	 * This method matches words from a list in a given target sentence
+	 * @param to_match: The list to match 
+	 * @param comment: comment string to match with
+	 * @return the number of matches
+	 */
 	public static double special_word_matcher(String[] to_match, String comment)           //match special words
 	{
 		String[] str = comment.replaceAll("[^a-zA-Z0-9 ]", " ").toLowerCase().split("\\s+");
@@ -152,11 +139,23 @@ public class ThreadTesting
 		}
 		return val;
 	}
+	/**
+	 * This method matches special characters from a list in a given comment
+	 * @param to_match: List to match
+	 * @param comment: comment string
+	 * @return the number of matches
+	 */
 	public static double special_character_matcher(String to_match, String comment)       //match special characters
 	{
 		int count = comment.split(Pattern.quote(to_match), -1).length - 1;
 		return 0.1*count;
 	}
+	/**
+	 * This method matches punctuations from a punctuation list in a given comment
+	 * @param to_match: list of punctuations to match
+	 * @param comment: comment string
+	 * @return number of matched punctuations
+	 */
 	public static double punc_matcher(String[] to_match, String comment)                 //match punctuations
 	{
 		int count = 0;
@@ -165,16 +164,6 @@ public class ThreadTesting
 			count+= comment.split(Pattern.quote(punc), -1).length - 1;
 		}
 		return 0.1*count;
-	}
-	public static int begin_matcher(String to_match, String comment)                     //match beginning words
-	{
-		String[] str = comment.replaceAll("[^a-zA-Z0-9 ]", " ").toLowerCase().split("\\s+");
-		if(str.length > 0 && str[0].equals(to_match))
-		{
-			//System.out.println(comment);
-			return 1;
-		}
-		return 0;
 	}
 	public static int length_matcher(String comment)									//length of comment
 	{

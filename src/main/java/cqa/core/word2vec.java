@@ -1,4 +1,4 @@
-package cqa.Feature_files.Java_files;
+package cqa.core;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,7 +14,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-
+/**
+ * This file finds out the top 10 similar words to each word in question and comment from a pre-trained word2vec model 
+ * @author titas
+ *
+ */
 public class word2vec {
 
     private static Logger log = LoggerFactory.getLogger(word2vec.class);

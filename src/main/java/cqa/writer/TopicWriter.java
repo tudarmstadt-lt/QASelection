@@ -1,4 +1,4 @@
-package cqa.Writer;
+package cqa.writer;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -13,7 +13,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
-
+/**
+ * This class calculates various features from topic vectors and words indicating topic classes
+ * @author titas
+ *
+ */
 public class TopicWriter 
 {
 	static double[] f = new double[7]; 
@@ -122,7 +126,6 @@ public class TopicWriter
 						f[2] = que_vec.Euclidean(que_vec, ans_vec);                          //euclidean distance of topic vectors
 						f[3] = word_matcher(l, comment);
 						f[4] = word_matcher(l2, comment);
-						//f[5] = word_matcher(topic_words[maxq], topic_words[maxc]);
 						f[5] = word_matcher(l,al);
 						f[6] = word_matcher(l2,al2);
 						double[] sub = que_vec.vector_sub(que_vec, ans_vec);
@@ -139,6 +142,11 @@ public class TopicWriter
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * This method removes duplicates from a string
+	 * @param s: input string
+	 * @return the string with distinct words
+	 */
 	public static String deDup(String s) 
 	{
 	    return Arrays.stream(s.split("\\s+")).distinct().collect(Collectors.joining(" "));
@@ -157,6 +165,12 @@ public class TopicWriter
 		}
 		return pos;
 	}
+	/**
+	 * This method finds word matchings in two strings
+	 * @param s1: first string
+	 * @param s2: second string
+	 * @return the number of matches
+	 */
 	public static double word_matcher(String s1, String s2)
 	{
 		double val=0.0;
@@ -174,6 +188,12 @@ public class TopicWriter
 		}
 		return val;
 	}
+	/**
+	 * Find the kth largest number in a list
+	 * @param nums: the input array
+	 * @param k: the number k
+	 * @return the kth largest number
+	 */
 	public static double findKthLargest(double[] nums, int k) {
 	    PriorityQueue<Double> q = new PriorityQueue<Double>(k);
 	    for(double i: nums){
