@@ -4,7 +4,26 @@
 	<groupId>cqa</groupId>
 	<artifactId>cqa</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<properties>
+  		<nd4j.version>0.4-rc3.9</nd4j.version>
+  	<dl4j.version>0.4-rc3.9</dl4j.version>
+	</properties>
 	<dependencies>
+		<dependency>
+     		<groupId>org.deeplearning4j</groupId>
+     		<artifactId>deeplearning4j-ui</artifactId>
+     		<version>${dl4j.version}</version>
+   		</dependency>
+	   	<dependency>
+	     	<groupId>org.deeplearning4j</groupId>
+	     	<artifactId>deeplearning4j-nlp</artifactId>
+	     	<version>${dl4j.version}</version>
+	   </dependency>
+	   <dependency>
+	     	<groupId>org.nd4j</groupId>
+	     	<artifactId>nd4j-native</artifactId> 
+	     	<version>${nd4j.version}</version>
+	   </dependency>
 		<dependency>
 			<groupId>info.debatty</groupId>
 			<artifactId>java-string-similarity</artifactId>
