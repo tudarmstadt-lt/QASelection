@@ -15,3 +15,4 @@ java -Xmx10g -jar QARank.jar [train-file-path] [test-file-path] [unannotated-fil
 * The system will generate all folders and required files.
 * The final MAP scores of the system and the SVM accuracy can be found in **result_files/final_scores.txt** file.
 * Users can run the system on a different dataset, given the training and test files are in the format as in SemEval 2016 - Task 3.  
+* The evaluation scripts used in the system can be looked up [here](http://alt.qcri.org/semeval2016/task3/data/uploads/semeval2016_task3_submissions_and_score.zip).
