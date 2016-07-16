@@ -21,18 +21,31 @@ public class Writer
 	static int ziso = 0;
 	static ArrayList<String>oisz_arr = new ArrayList<>();
 	static ArrayList<String>ziso_arr = new ArrayList<>();
-	
-	public static void main(String args[])
+	static String input;
+	public Writer(String inp)
+	{
+		input = inp;	
+	}
+	/**
+	 * This method initializes computation
+	 */
+	public static void initialize()
+	{
+		System.out.println("Computing final scores......");
+		WriterRun(input+"/parsed_files/test_clean.txt", input+"/result_files/out.txt", input+"/result_files/results.txt", input+"/result_files/error.txt");
+		
+	}
+	public static void WriterRun(String inp1, String inp2, String out1, String out2)
 	{
 		PrintWriter writer = null;
 		BufferedReader reader = null;
 		BufferedReader reader_2 = null;
 		PrintWriter writer2 = null; 
-		File file = new File(args[0]);
-		File file_2 = new File(args[1]);
+		File file = new File(inp1);
+		File file_2 = new File(inp2);
 		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[2], false)));
-			writer2 = new PrintWriter(new BufferedWriter(new FileWriter(args[3], false)));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter(out1, false)));
+			writer2 = new PrintWriter(new BufferedWriter(new FileWriter(out2, false)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -41,6 +54,7 @@ public class Writer
 			reader_2 = new BufferedReader(new FileReader(file_2));
 			try {
 				String str = reader.readLine();
+				String str2 = reader_2.readLine();
 				do
 				{
 					String[] qs = str.split("\\s+");
@@ -73,10 +87,6 @@ public class Writer
 				while((str = reader.readLine())!=null);
 				writer.close();
 				writer2.close();
-				System.out.println("bad classified as bad: "+ zisz);                   //misclassified points
-				System.out.println("bad classified as good: "+ ziso);
-				System.out.println("good classified as bad: "+ oisz);
-				System.out.println("good classified as good: "+ oiso);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

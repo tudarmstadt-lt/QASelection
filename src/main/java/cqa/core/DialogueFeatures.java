@@ -16,13 +16,29 @@ import java.util.ArrayList;
  */
 public class DialogueFeatures                                       // Capture if multiple users are in dialogue
 {
-	public static void main(String args[])
+	static String input;
+	static String output;
+	public DialogueFeatures(String inp, String out)
 	{
-		File file = new File(args[0]);               //input file
+		input = inp;	
+		output = out;
+	}
+	/**
+	 * This method initializes computation
+	 */
+	public static void initialize()
+	{
+		System.out.println("Dialogue Features computation starts......");
+		DialogueFeaturesRun(input+"/utrain_clean.txt", output+"/train/dialog_train.txt");
+		DialogueFeaturesRun(input+"/utest_clean.txt", output+"/test/dialog_test.txt");
+	}
+	public static void DialogueFeaturesRun(String input, String output)
+	{
+		File file = new File(input);               //input file
 		BufferedReader reader = null;
 		PrintWriter writer = null;
 		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[1], false)));      //output file
+			writer = new PrintWriter(new BufferedWriter(new FileWriter(output, false)));      //output file
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -132,7 +148,7 @@ public class DialogueFeatures                                       // Capture i
 	{
 		for(int i=0; i<label.size(); i++)
 		{
-			writer.println(get_Label_value(label.get(i))+" 1:"+v1.get(i)+" 2:"+v2.get(i));
+			writer.println(binary_class(label.get(i))+" 1:"+v1.get(i)+" 2:"+v2.get(i));
 		}
 	}
 	public static int binary_class(String s)                     //Generate binary labels

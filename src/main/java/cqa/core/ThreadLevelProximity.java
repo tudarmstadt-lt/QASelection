@@ -20,14 +20,31 @@ public class ThreadLevelProximity
 {
 	static ThreadLevelUsers thread = new ThreadLevelUsers();
 	static double[] f = new double[4];
-	public static void main(String args[])
+	static String input;
+	static String output;
+	public ThreadLevelProximity(String inp, String out)
 	{
-		File file = new File(args[0]);
+		input = inp;	
+		output = out;
+	}
+	/**
+	 * This method initializes computation
+	 */
+	public static void initialize()
+	{
+		System.out.println("Thread Level Features computation starts......");
+		ThreadLevelProximityRun(input+"/utrain_clean.txt", output+"/train/threadlevel_train.txt");
+		ThreadLevelProximityRun(input+"/utest_clean.txt", output+"/test/threadlevel_test.txt");
+		
+	}
+	public static void ThreadLevelProximityRun(String input, String output)
+	{
+		File file = new File(input);
 		BufferedReader reader = null;
 		PrintWriter writer = null;
 		
 		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[1], false)));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter(output, false)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

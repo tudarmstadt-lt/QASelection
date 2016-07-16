@@ -18,9 +18,26 @@ import java.util.HashMap;
 public class EmbeddingTrainer 
 {
 	static int size = 100;              //word vector dimension
-	public static void main(String args[])
+	static String input;
+	public EmbeddingTrainer(String inp)
 	{
-		File file = new File(args[0]);
+		input = inp;	
+	}
+	/**
+	 * This method initializes computation
+	 */
+	public static void initialize()
+	{
+		System.out.println("Sentence Embedding Training starts......");
+		File inputFile = new File(input);
+		File parent = inputFile.getParentFile();                        //get parent directory
+		String pathgp = parent.getAbsolutePath();
+		EmbeddingTrainerRun(pathgp+"/word2vec_files/word_vectors.txt", pathgp+"/parsed_files/train_clean.txt", pathgp+"/word2vec_files/vectors_train.txt");
+		EmbeddingTrainerRun(pathgp+"/word2vec_files/word_vectors.txt", pathgp+"/parsed_files/test_clean.txt", pathgp+"/word2vec_files/vectors_test.txt");
+	}
+	public static void EmbeddingTrainerRun(String input1, String input2, String output)
+	{
+		File file = new File(input1);
 		BufferedReader reader = null;
 		
 		try {
@@ -35,7 +52,7 @@ public class EmbeddingTrainer
 					vector v = new vector(splited[1]);
 					map.put(word, v);
 				}
-				sentence_vector(map, args[1], args[2]);          // generate sentence vectors from word vectors
+				sentence_vector(map, input2, output);          // generate sentence vectors from word vectors
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -28,13 +28,46 @@ import info.debatty.java.stringsimilarity.SorensenDice;
 public class SimilarityFeatureGenerator         //File generating various string features
 {
 	static double[] f = new double[20];
-	public static void main(String[] args)
+	static String input;
+	public SimilarityFeatureGenerator(String inp)
 	{
-		File file = new File(args[0]);
+		input = inp;	
+	}
+	/**
+	 * This method initializes computation
+	 */
+	public static void initialize()
+	{
+		File inputFile = new File(input);
+		File parent = inputFile.getParentFile();
+		String pathgp = parent.getAbsolutePath();
+		File dir = new File(pathgp+"/svm_files/");
+		File dir2 = new File(pathgp+"/svm_files/train/");
+		File dir3 = new File(pathgp+"/svm_files/test/");
+		boolean success = dir.mkdirs();                       //create directory for storing new files
+		boolean success2 = dir2.mkdirs();
+		boolean success3 = dir3.mkdirs();
+		dir.setExecutable(true);                             //set file permissions for files in new directory
+		dir.setReadable(true);
+		dir.setWritable(true);
+		dir2.setExecutable(true);
+		dir2.setReadable(true);
+		dir2.setWritable(true);
+		dir3.setExecutable(true);
+		dir3.setReadable(true);
+		dir3.setWritable(true);
+		System.out.println("Similarity Features computation starts......");
+		SimilarityFeatureGeneratorRun(input+"/train_clean.txt", pathgp+"/svm_files/train/string_train.txt");
+		SimilarityFeatureGeneratorRun(input+"/test_clean.txt", pathgp+"/svm_files/test/string_test.txt");
+		
+	}
+	public static void SimilarityFeatureGeneratorRun(String input, String output)
+	{
+		File file = new File(input);
 		BufferedReader reader = null;
 		PrintWriter writer = null;
 		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[1], false)));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter(output, false)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

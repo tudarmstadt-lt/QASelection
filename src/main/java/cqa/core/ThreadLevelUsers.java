@@ -12,13 +12,14 @@ import java.io.PrintWriter;
 import cqa.writer.SVMWriter;
 /**
  * This class finds out if a comment is by the asker of the question and is an ack or not, or a question or not
+ * Not used in final feature set
  * @author titas
  *
  */
 public class ThreadLevelUsers 
 {
 	static double[] f = new double[4];
-	public static void main(String args[])
+	public static void ThreadLevelUsersRun(String args[])
 	{
 		File file = new File(args[0]);
 		BufferedReader reader = null;

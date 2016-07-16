@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import cqa.writer.SVMWriter;
 /**
  * This class calculates MetaData features like if asker answered in a comment, comment position or acknowledgement in comments
@@ -17,13 +18,29 @@ import cqa.writer.SVMWriter;
 public class MetaFeatures                                      //Meta Data Features
 {
 	static double[] f = new double[6];
-	public static void main(String[] args)
+	static String input;
+	static String output;
+	public MetaFeatures(String inp, String out)
 	{
-		File file = new File(args[0]);
+		input = inp;	
+		output = out;
+	}
+	/**
+	 * This method initializes computation
+	 */
+	public static void initialize()
+	{
+		System.out.println("MetaData Features computation starts......");
+		MetaFeaturesRun(input+"/utrain_clean.txt", output+"/train/meta_train.txt");
+		MetaFeaturesRun(input+"/utest_clean.txt", output+"/test/meta_test.txt");
+	}
+	public static void MetaFeaturesRun(String input, String output)
+	{
+		File file = new File(input);
 		BufferedReader reader = null;
 		PrintWriter writer = null;
 		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[1], false)));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter(output, false)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

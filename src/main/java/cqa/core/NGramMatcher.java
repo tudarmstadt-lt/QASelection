@@ -14,13 +14,14 @@ import java.util.List;
 import cqa.writer.SVMWriter;
 /**
  * This class does n(1,2,3) gram matching between question and comment on an extended wordlist of top 10 similar words from Word2Vec
+ * Not used in final feature set
  * @author titas
  *
  */
 public class NGramMatcher 
 {
 	static double[] f = new double[3];
-	public static void main(String args[])
+	public static void NGramMatcherRun(String args[])
 	{
 		File file = new File(args[0]);
 		File file2 = new File(args[1]);

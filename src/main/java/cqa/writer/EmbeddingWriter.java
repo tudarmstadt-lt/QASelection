@@ -16,14 +16,31 @@ import java.io.PrintWriter;
 public class EmbeddingWriter 
 {
 	static double[] f = new double[4];
-	public static void main(String args[])
+	static String input;
+	static String output;
+	public EmbeddingWriter(String inp, String out)
 	{
-		File file = new File(args[0]);
+		input = inp;	
+		output = out;
+	}
+	/**
+	 * This method initializes computation
+	 */
+	public static void initialize()
+	{
+		System.out.println("Writing word embeddings to files......");
+		EmbeddingWriterRun(input+"/vectors_train.txt", output+"/train/embedding_train.txt");
+		EmbeddingWriterRun(input+"/vectors_test.txt", output+"/test/embedding_test.txt");
+		
+	}
+	public static void EmbeddingWriterRun(String input, String output)
+	{
+		File file = new File(input);
 		BufferedReader reader = null;
 		PrintWriter writer = null;
 		double cos = 0.0;
 		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[1], false)));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter(output, false)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -16,28 +16,43 @@ import java.util.ArrayList;
  */
 public class MultiFileReader 
 {
-	static int num_features = 168;
+	static int num_features = 141;
 	static ArrayList<Integer> length_auth = new ArrayList<>();
 	static ArrayList<Integer> length_auth_test = new ArrayList<>();
-	public static void main(String args[])
+	static String input1;
+	static String input2;
+	public MultiFileReader(String inp1, String inp2)
 	{
-		File SVM_dir_train = new File(args[0]);                 //path to train files' directory
-		File SVM_dir_test = new File(args[1]);                  //path to test files' directory
+		input1 = inp1;	
+		input2 = inp2;
+	}
+	/**
+	 * This method initializes computation
+	 */
+	public static void initialize()
+	{
+		System.out.println("Combining SVM feature files......");
+		MultiFileReaderRun(input1+"/train/", input1+"/test/", input2+"/train_clean.txt", input2+"/test_clean.txt");
+	}
+	public static void MultiFileReaderRun(String train, String test, String train2, String test2)
+	{
+		File SVM_dir_train = new File(train);                 //path to train files' directory
+		File SVM_dir_test = new File(test);                  //path to test files' directory
 		File[] files_train = SVM_dir_train.listFiles();
 		File[] files_test = SVM_dir_test.listFiles();
 		String[] SVM_files_train = new String[files_train.length];
 		String[] SVM_files_test = new String[files_test.length];
 		for(int i=0; i<files_train.length; i++)
 		{
-			SVM_files_train[i] = args[0]+"/"+files_train[i].getName();
+			SVM_files_train[i] = train+"/"+files_train[i].getName();
 		}
 		for(int i=0; i<files_test.length; i++)
 		{
-			SVM_files_test[i] = args[1]+"/"+files_test[i].getName();
+			SVM_files_test[i] = test+"/"+files_test[i].getName();
 		}
-		len_cal(args[2], args[3]);
-		multireader(SVM_files_train, args[0]+"/SVM_train.txt", num_features, 0, files_train.length);
-		multireader(SVM_files_test, args[1]+"/SVM_test.txt", num_features, 1, files_test.length);
+		len_cal(train2, test2);
+		multireader(SVM_files_train, train+"/SVM_train.txt", num_features, 0, files_train.length);
+		multireader(SVM_files_test, test+"/SVM_test.txt", num_features, 1, files_test.length);
 	}
 	/**
 	 * This method reads multiple train or test SVM data files and combines them in one
@@ -199,7 +214,6 @@ public class MultiFileReader
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(length_auth.size()+" "+length_auth_test.size());
 	}
 	/**
 	 * This method z-score normalizes all data

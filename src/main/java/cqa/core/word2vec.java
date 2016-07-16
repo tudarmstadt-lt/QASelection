@@ -15,7 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 /**
- * This file finds out the top 10 similar words to each word in question and comment from a pre-trained word2vec model 
+ * This file finds out the top 10 similar words to each word in question and comment from a pre-trained word2vec model
+ * Not used in final feature set 
  * @author titas
  *
  */
@@ -23,7 +24,7 @@ public class word2vec {
 
     private static Logger log = LoggerFactory.getLogger(word2vec.class);
 
-    public static void main(String[] args) throws Exception {
+    public static void word2vecRun(String[] args) throws Exception {
     			
     			Word2Vec word2vec = WordVectorSerializer.loadFullModel(args[0]);          //load model
     			File file = new File(args[1]);

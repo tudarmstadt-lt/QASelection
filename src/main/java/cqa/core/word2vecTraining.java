@@ -11,6 +11,7 @@ import org.deeplearning4j.text.sentenceiterator.SentenceIterator;
 import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
 import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
+
 import java.io.File;
 
 /**
@@ -18,11 +19,37 @@ import java.io.File;
  * @author titas
  *
  */
-public class word2vecTraining {
-
-    public static void main(String[] args) throws Exception {
+public class word2vecTraining 
+{
+	static String input;
+	public word2vecTraining(String inp)
+	{
+		input = inp;	
+	}
+	/**
+	 * This method initializes computation
+	 */
+	public static void initialize()
+	{
+		File inputFile = new File(input);
+		File parent = inputFile.getParentFile();
+		String pathgp = parent.getAbsolutePath();
+		File dir = new File(pathgp+"/word2vec_files/");
+		boolean success = dir.mkdirs();
+		dir.setExecutable(true);
+		dir.setReadable(true);
+		dir.setWritable(true);
+		System.out.println("Word2Vec Training starts......");
+		try {
+			word2vecTrainingRun(pathgp+"/parsed_files/unannotated_clean.txt", pathgp+"/word2vec_files/word_vectors.txt", pathgp+"/word2vec_files/model.txt");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}
+    public static void word2vecTrainingRun(String input, String output, String output2) throws Exception {
         // Strip white space before and after for each line
-        SentenceIterator iter = new LineSentenceIterator(new File(args[0]));;
+        SentenceIterator iter = new LineSentenceIterator(new File(input));
         // Split on white spaces in the line to get words
         TokenizerFactory t = new DefaultTokenizerFactory();
         t.setTokenPreProcessor(new CommonPreprocessor());
@@ -50,7 +77,7 @@ public class word2vecTraining {
                 .vocabCache(cache)
                 .build();
         vec.fit();
-        WordVectorSerializer.writeWordVectors(vec, args[1]);         //write word vectors
-        WordVectorSerializer.writeFullModel(vec, args[1]);         //write model
+        WordVectorSerializer.writeWordVectors(vec, output);         //write word vectors
+        WordVectorSerializer.writeFullModel(vec, output2);         //write model
     }
 }

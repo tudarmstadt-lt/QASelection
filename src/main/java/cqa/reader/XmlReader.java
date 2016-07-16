@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.nio.file.Files;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -17,10 +18,39 @@ import org.dom4j.io.SAXReader;
  */
 public class XmlReader                    // File for reading XML files 
 {
-	public static void main(String args[])    
+	static String input;
+	static int flag;
+	public XmlReader(String inp, int flag)
 	{
-		parse(args[0], args[1]);
-		get_users(args[0], args[1]);
+		input = inp;
+		this.flag = flag;
+	}
+	/**
+	 * This method initializes computation
+	 */
+	public static void initialize()
+	{
+		File inputFile = new File(input);
+		File parent = inputFile.getParentFile();
+		String pathgp = parent.getAbsolutePath();
+		System.out.println("XML parsing starts......");
+		if(flag == 0)
+		{
+			File dir = new File(pathgp+"/parsed_files/");
+			boolean success = dir.mkdirs();
+			dir.setExecutable(true);
+			dir.setReadable(true);
+			dir.setWritable(true);
+			parse(input+"/train.xml", pathgp+"/parsed_files/train.txt");
+			get_users(input+"/train.xml", pathgp+"/parsed_files/utrain.txt");
+			parse(input+"/test.xml", pathgp+"/parsed_files/test.txt");
+			get_users(input+"/test.xml", pathgp+"/parsed_files/utest.txt");
+			
+		}
+		else
+		{
+			parse_unannotated(input+"/unannotated.xml", pathgp+"/parsed_files/unannotated.txt");
+		}
 	}
 	/**
 	 * This method parses the input file using dom4j XML reader
@@ -28,7 +58,7 @@ public class XmlReader                    // File for reading XML files
 	 * @param output: output parsed file
 	 */
 	public static void parse(String input, String output)
-	{
+	{ 
 		File inputFile = new File(input);
 		SAXReader reader = new SAXReader();
 		try {
@@ -62,6 +92,43 @@ public class XmlReader                    // File for reading XML files
 			    	String c_id = comment.get(j).valueOf("@RELC_ID");
 			    	String label = comment.get(j).valueOf("@RELC_RELEVANCE2RELQ");
 			    	writer.println(c_id+" "+label);
+		    		writer.println(l);
+			    }
+			   
+			}
+			writer.close();
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void parse_unannotated(String input, String output)
+	{ 
+		File inputFile = new File(input);
+		SAXReader reader = new SAXReader();
+		try {
+			Document document = reader.read(inputFile);
+			List<Node> nodes = document.selectNodes("xml/Thread");         //read XML file
+			PrintWriter writer = null;
+			try {
+				writer = new PrintWriter(new BufferedWriter(new FileWriter(output, false)));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			for(int i=0; i< nodes.size(); i++)
+			{
+				String p = nodes.get(i).selectSingleNode("RelQuestion/RelQSubject").getText().trim().replaceAll("\\s+", " ");
+				String l = nodes.get(i).selectSingleNode("RelQuestion/RelQBody").getText().trim().replaceAll("\\s+", " ");           //Extract Question
+			    List<Node> comment = nodes.get(i).selectNodes("RelComment");
+			    if(comment.size() != 0)
+			    {
+				    if(l.length() != 0)
+				    	writer.println(l);
+				    else
+				    	writer.println(p);
+			    }
+			    for(int j=0; j<comment.size(); j++)
+			    {
+			    	l = comment.get(j).selectSingleNode("RelCText").getText().trim().replaceAll("\\s+", " ");                        // Extract Comment
 		    		writer.println(l);
 			    }
 			   

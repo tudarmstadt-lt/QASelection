@@ -19,13 +19,50 @@ import cqa.writer.SVMWriter;
 public class ThreadTesting
 {
 	static double[] f = new double[5];
-	public static void main(String args[])
+	static String[] good_list = new String[20];
+	static String[] bad_list = new String[20];
+	static String input;
+	static String output;
+	public ThreadTesting(String inp, String out)
 	{
-		File file = new File(args[0]);
+		input = inp;	
+		output = out;
+	}
+	/**
+	 * This method initializes computation
+	 */
+	public static void initialize()
+	{
+		File file = new File(input+"/words_good.txt");                 //file containing good class words
+		File file2 = new File(input+"/words_bad.txt");                 //file containing bad class words
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			BufferedReader reader2 = new BufferedReader(new FileReader(file2));
+			int count = 0;
+			while(count < 20)
+			{
+				String[] l = reader.readLine().split("\\s+");
+				good_list[count] = l[0];
+				l = reader2.readLine().split("\\s+");
+				bad_list[count] = l[0];
+				count++;
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Thread Features computation starts......");
+		ThreadTestingRun(input+"/train_clean_thread.txt", output+"/train/thread_train.txt");
+		ThreadTestingRun(input+"/test_clean_thread.txt", output+"/test/thread_test.txt");
+		
+	}
+	public static void ThreadTestingRun(String input, String output)
+	{
+		File file = new File(input);
 		BufferedReader reader = null;
 		PrintWriter writer = null;
 		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter(args[1], false)));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter(output, false)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -33,8 +70,6 @@ public class ThreadTesting
 			reader = new BufferedReader(new FileReader(file));
 			try {
 				String q_id = reader.readLine();
-				String[] good_words = {"get","good","qatar","go","one","visa","also","even","like","doha","need","would","know","try","best","think","work","take","find","people"};            //good class words on train set
-				String[] bad_words = {"get","know","one","thanks","like","qatar","good","would","go","want","dont","think","need","also","much","find","time","people","please","work"};        //bad class words on train set
 				String[] punc = {"!", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "+", "=", ":", ";", ".", "/", "<", ">", "{", "}", "[", "]", "~", "\\"};									//punctuation list
 				do
 				{
@@ -49,8 +84,8 @@ public class ThreadTesting
 						String label = splited[1];
 						String comment = reader.readLine();
 						f[0] = URL_matcher(comment, c_id) + email_matcher(comment, c_id) + tag_matcher(comment, c_id);
-						f[1] = special_word_matcher(good_words, comment);
-						f[2] = special_word_matcher(bad_words, comment);
+						f[1] = special_word_matcher(good_list, comment);
+						f[2] = special_word_matcher(bad_list, comment);
 						f[3] = special_character_matcher("?", comment) + special_character_matcher("@", comment)+punc_matcher(punc,comment);
 						f[4] = length_matcher(comment);
 						SVMWriter w = new SVMWriter(writer, label, 1, f);
@@ -66,6 +101,7 @@ public class ThreadTesting
 			e.printStackTrace();
 		}
 	}
+	
 	/**
 	 * This method matches URLs if any in the comments
 	 * @param comment: comment string
@@ -79,7 +115,6 @@ public class ThreadTesting
         double val = 0.0;
         while(m.find())
         {
-        	System.out.println("yes");
         	val+=0.1;
         }
         return val;
