@@ -3,7 +3,7 @@ QARank is licensed under ASL 2.0 and other lenient licenses, allowing its use fo
 
 ## Downloading QARank
 * Download the jar file of the project from here.
-* Alternatively, download the **zip** of the java project and import it as a **maven** project in eclipse for experimentation.
+* Alternatively, download the [zip](https://github.com/tudarmstadt-lt/QASelection/archive/master.zip) of the java project and import it as a **maven** project in eclipse for experimentation.
 
 ## Downloading Data
 * QARank requires a training file, a test file and unannotated data to train models.
