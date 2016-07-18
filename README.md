@@ -2,9 +2,8 @@
 QARank is licensed under ASL 2.0 and other lenient licenses, allowing its use for academic and commercial purposes without restrictions.
 
 ## Downloading QARank
-* Download the jar file of the project from here.
+* Download the jar file of the project from [here](https://github.com/tudarmstadt-lt/QASelection/releases/download/release1/QARank.jar).
 * Alternatively, download the [zip](https://github.com/tudarmstadt-lt/QASelection/archive/master.zip) of the java project and import it as a **maven** project in eclipse for experimentation.
-  * Add the jars in the `/src/main/resources/lib/` in your imported maven project before running it. 
 
 ## Downloading Data
 * QARank requires a training file, a test file and unannotated data to train models.
@@ -20,11 +19,12 @@ QARank is licensed under ASL 2.0 and other lenient licenses, allowing its use fo
 * The unannotated data can be downloaded from [here](http://alt.qcri.org/semeval2016/task3/data/uploads/QL-unannotated-data-subtaskA.xml.zip).
  * After unzipping the this folder, move to `QL-unannotated-data-subtaskA.xml/QL-unannotated-data-subtaskA.xml` and copy this file to *xml_files* directory and rename it **unannotated.xml**.
  * This file is large and requires a lot of memory to train models. To avoid larger training time, one can use training data for the same task. Make sure to rename the file to **unannotated.xml**.
+ * Download the *python scripts* required to run the system from [here](https://github.com/tudarmstadt-lt/QASelection/releases/download/release1/resources.zip).
 
 ## Running QARank
 * Run QARank jar as
 ```
-java -Xmx10g -jar QARank.jar [path-to-xml_files-folder]
+java -Xmx10g -jar QARank.jar [absolute-path-to-xml_files-folder] [absolute-path-to-resources-folder]
 ```
 * The system will generate all folders and required files.
 * The final MAP scores of the system and the SVM accuracy can be found in **result_files/final_scores.txt** file.
