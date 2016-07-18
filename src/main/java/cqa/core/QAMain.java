@@ -15,55 +15,28 @@ public class QAMain
 {
     public static void main(String args[]) //args[0] is xml_files directory
     {
-    	File trainFile = new File(args[0]);
-    	String pathgp = get_parent(args[0]);
-    	File dir = new File(pathgp+"/xml_files/");           								//create xml_files folder
-    	boolean success = dir.mkdirs();
-    	dir.setExecutable(true);                             								//set file permissions for files in new directory
-		dir.setReadable(true);
-		dir.setWritable(true);
-		move_files(args[0], "train.xml");
-		move_files(args[1], "test.xml");
-		move_files(args[2], "unannotated.xml");
-		String inp = pathgp+"/xml_files/";
     	String resource_path = new File(".").getAbsolutePath();
     	int last = resource_path.length()-1;
-    	resource_path = resource_path.substring(0, last)+"/src/main/resources/";				//path to resources directory
-    	parsed_files(inp, 0);                                                           		//parsed files generation
-    	parsed_files(inp, 1);																	//comment this to not generate unannotated parsed files
-    	get_clean_files(get_parent(inp)+"/parsed_files/", resource_path);						//get clean data
-    	string_similarity(get_parent(inp)+"/parsed_files/");									//string similarity features computation
-    	dialogue_features(get_parent(inp)+"/parsed_files/",get_parent(inp)+"/svm_files/");		//dialogue features computation
-    	meta_features(get_parent(inp)+"/parsed_files/",get_parent(inp)+"/svm_files/");			//metadata features computation
-    	thread_level_features(get_parent(inp)+"/parsed_files/",get_parent(inp)+"/svm_files/");	//thread level features computation
-    	word2vec_training(inp);																	//word2vec training
-    	embedding_trainer(inp);																	//sentence vectors computation
-    	embedding_writer(get_parent(inp)+"/word2vec_files/", get_parent(inp)+"/svm_files/");	//writing embeddings
-    	get_clean_files_thread(get_parent(inp)+"/parsed_files/", resource_path);				//get clean data
-    	user_features(get_parent(inp)+"/parsed_files/");										//user features computation
-    	thread_testing(get_parent(inp)+"/parsed_files/",get_parent(inp)+"/svm_files/");			//thread features computation
-    	multi_file_reader(get_parent(inp)+"/svm_files/", get_parent(inp)+"/parsed_files/");		//combining several feature files
-    	run_svm(get_parent(inp)+"/svm_files/", resource_path, 0);								//run svm 
-    	compute_scorer(get_parent(inp), resource_path);											//compute scorer scripts for test data
-    	writer(get_parent(inp));																//run scorer scripts
-    	get_scores(get_parent(inp)+"/result_files/", resource_path);							//get final scores
+    	resource_path = resource_path.substring(0, last)+"/src/main/resources/";				    //path to resources directory
+    	parsed_files(args[0], 0);                                                           		//parsed files generation
+    	parsed_files(args[0], 1);																	//comment this to not generate unannotated parsed files
+    	get_clean_files(get_parent(args[0])+"/parsed_files/", resource_path);						//get clean data
+    	string_similarity(get_parent(args[0])+"/parsed_files/");									//string similarity features computation
+    	dialogue_features(get_parent(args[0])+"/parsed_files/",get_parent(args[0])+"/svm_files/");		//dialogue features computation
+    	meta_features(get_parent(args[0])+"/parsed_files/",get_parent(args[0])+"/svm_files/");			//metadata features computation
+    	thread_level_features(get_parent(args[0])+"/parsed_files/",get_parent(args[0])+"/svm_files/");	//thread level features computation
+    	word2vec_training(args[0]);																	//word2vec training
+    	embedding_trainer(args[0]);																	//sentence vectors computation
+    	embedding_writer(get_parent(args[0])+"/word2vec_files/", get_parent(args[0])+"/svm_files/");	//writing embeddings
+    	get_clean_files_thread(get_parent(args[0])+"/parsed_files/", resource_path);				//get clean data
+    	user_features(get_parent(args[0])+"/parsed_files/");										//user features computation
+    	thread_testing(get_parent(args[0])+"/parsed_files/",get_parent(args[0])+"/svm_files/");			//thread features computation
+    	multi_file_reader(get_parent(args[0])+"/svm_files/", get_parent(args[0])+"/parsed_files/");		//combining several feature files
+    	run_svm(get_parent(args[0])+"/svm_files/", resource_path, 0);								//run svm 
+    	compute_scorer(get_parent(args[0]), resource_path);											//compute scorer scripts for test data
+    	writer(get_parent(args[0]));																//run scorer scripts
+    	get_scores(get_parent(args[0])+"/result_files/", resource_path);							//get final scores
 		
-    }
-    /**
-     * This method moves files from source to destination
-     * @param inp: The input file's path
-     * @param file_name: The name of the output file
-     */
-    public static void move_files(String inp, String file_name)
-    {
-    	Process p;
-		try {
-			p = (new ProcessBuilder("mv",inp,get_parent(inp)+"/xml_files/"+file_name)).start();
-			p.waitFor();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     }
     /**
      * This method generates parsed files from XML files
