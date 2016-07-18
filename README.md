@@ -31,3 +31,6 @@ java -Xmx10g -jar QARank.jar [absolute-path-to-xml_files-folder] [absolute-path-
 * Users can run the system on a different dataset, given the training and test files are in the format as in SemEval 2016 - Task 3.  
 * The evaluation scripts used in the system can be looked up [here](http://alt.qcri.org/semeval2016/task3/data/uploads/semeval2016_task3_submissions_and_score.zip).
 
+## Contents
+* [Introduction](https://github.com/tudarmstadt-lt/QASelection/blob/master/src/main/java/cqa/doc/Home.md)
+* [Features](https://github.com/tudarmstadt-lt/QASelection/blob/master/src/main/java/cqa/doc/Features.md)
