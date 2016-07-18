@@ -2,6 +2,8 @@ package cqa.core;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
+
 import cqa.reader.MultiFileReader;
 import cqa.reader.XmlReader;
 import cqa.writer.EmbeddingWriter;
@@ -15,7 +17,7 @@ public class QAMain
 {
     public static void main(String args[]) //args[0] is xml_files directory
     {
-    	String resource_path = args[1]+"/scripts/";				    											//path to resources directory
+    	String resource_path = args[1]+"/scripts/";                                                         //path to resources directory
     	parsed_files(args[0], 0);                                                           				//parsed files generation
     	parsed_files(args[0], 1);																			//comment this to not generate unannotated parsed files
     	get_clean_files(get_parent(args[0])+"/parsed_files/", resource_path);								//get clean data
