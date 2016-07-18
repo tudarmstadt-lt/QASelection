@@ -14,12 +14,12 @@ QARank is licensed under ASL 2.0 and other lenient licenses, allowing its use fo
 * The original test data can be downloaded from
 [here](http://alt.qcri.org/semeval2016/task3/data/uploads/semeval2016_task3_tests.zip).
 * After unzipping this folder, move to `semeval2016-task3-cqa-ql-traindev-v3.2/v3.2/train/`. The entire training data for Task 3 can be found here. 
-* Choose any of the *subtask A* train files for training and copy it to *xml_files* directory. Rename the training file **train.xml**.
-* Alternatively, combine various training xml files into one file *train.xml* for larger training data. Make sure to preserve the XML tree structure while doing this.
+ * Choose any of the *subtask A* train files for training and copy it to *xml_files* directory. Rename the training file **train.xml**.
+ * Alternatively, combine various training xml files into one file *train.xml* for larger training data. Make sure to preserve the XML tree structure while doing this.
 * Similarly, choose one of the *subtask A* files in `semeval2016-task3-cqa-ql-traindev-v3.2/v3.2/dev/` or `semeval2016_task3_tests/SemEval2016_task3_test/English/` as test data and rename it **test.xml**.
 * The unannotated data can be downloaded from [here](http://alt.qcri.org/semeval2016/task3/data/uploads/QL-unannotated-data-subtaskA.xml.zip).
-* After unzipping the this folder, move to `QL-unannotated-data-subtaskA.xml/QL-unannotated-data-subtaskA.xml` and copy this file to *xml_files* directory and rename it **unannotated.xml**.
-* This file is large and requires a lot of memory to train models. To avoid larger training time, one can use training data for the same task. Make sure to rename the file to **unannotated.xml**.
+ * After unzipping the this folder, move to `QL-unannotated-data-subtaskA.xml/QL-unannotated-data-subtaskA.xml` and copy this file to *xml_files* directory and rename it **unannotated.xml**.
+ * This file is large and requires a lot of memory to train models. To avoid larger training time, one can use training data for the same task. Make sure to rename the file to **unannotated.xml**.
 
 ## Running QARank
 * Run QARank jar as
