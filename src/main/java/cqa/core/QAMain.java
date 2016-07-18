@@ -17,25 +17,25 @@ public class QAMain
     {
     	String resource_path = new File(".").getAbsolutePath();
     	int last = resource_path.length()-1;
-    	resource_path = resource_path.substring(0, last)+"/src/main/resources/";				    //path to resources directory
-    	parsed_files(args[0], 0);                                                           		//parsed files generation
-    	parsed_files(args[0], 1);																	//comment this to not generate unannotated parsed files
-    	get_clean_files(get_parent(args[0])+"/parsed_files/", resource_path);						//get clean data
-    	string_similarity(get_parent(args[0])+"/parsed_files/");									//string similarity features computation
-    	dialogue_features(get_parent(args[0])+"/parsed_files/",get_parent(args[0])+"/svm_files/");		//dialogue features computation
-    	meta_features(get_parent(args[0])+"/parsed_files/",get_parent(args[0])+"/svm_files/");			//metadata features computation
-    	thread_level_features(get_parent(args[0])+"/parsed_files/",get_parent(args[0])+"/svm_files/");	//thread level features computation
-    	word2vec_training(args[0]);																	//word2vec training
-    	embedding_trainer(args[0]);																	//sentence vectors computation
-    	embedding_writer(get_parent(args[0])+"/word2vec_files/", get_parent(args[0])+"/svm_files/");	//writing embeddings
-    	get_clean_files_thread(get_parent(args[0])+"/parsed_files/", resource_path);				//get clean data
-    	user_features(get_parent(args[0])+"/parsed_files/");										//user features computation
-    	thread_testing(get_parent(args[0])+"/parsed_files/",get_parent(args[0])+"/svm_files/");			//thread features computation
-    	multi_file_reader(get_parent(args[0])+"/svm_files/", get_parent(args[0])+"/parsed_files/");		//combining several feature files
-    	run_svm(get_parent(args[0])+"/svm_files/", resource_path, 0);								//run svm 
-    	compute_scorer(get_parent(args[0]), resource_path);											//compute scorer scripts for test data
-    	writer(get_parent(args[0]));																//run scorer scripts
-    	get_scores(get_parent(args[0])+"/result_files/", resource_path);							//get final scores
+    	resource_path = resource_path.substring(0, last)+"/src/main/resources/scripts/";				    //path to resources directory
+    	parsed_files(args[0], 0);                                                           				//parsed files generation
+    	parsed_files(args[0], 1);																			//comment this to not generate unannotated parsed files
+    	get_clean_files(get_parent(args[0])+"/parsed_files/", resource_path);								//get clean data
+    	string_similarity(get_parent(args[0])+"/parsed_files/");											//string similarity features computation
+    	dialogue_features(get_parent(args[0])+"/parsed_files/",get_parent(args[0])+"/svm_files/");			//dialogue features computation
+    	meta_features(get_parent(args[0])+"/parsed_files/",get_parent(args[0])+"/svm_files/");				//metadata features computation
+    	thread_level_features(get_parent(args[0])+"/parsed_files/",get_parent(args[0])+"/svm_files/");		//thread level features computation
+    	word2vec_training(args[0]);																			//word2vec training
+    	embedding_trainer(args[0]);																			//sentence vectors computation
+    	embedding_writer(get_parent(args[0])+"/word2vec_files/", get_parent(args[0])+"/svm_files/");		//writing embeddings
+    	get_clean_files_thread(get_parent(args[0])+"/parsed_files/", resource_path);						//get clean data
+    	user_features(get_parent(args[0])+"/parsed_files/");												//user features computation
+    	thread_testing(get_parent(args[0])+"/parsed_files/",get_parent(args[0])+"/svm_files/");				//thread features computation
+    	multi_file_reader(get_parent(args[0])+"/svm_files/", get_parent(args[0])+"/parsed_files/");			//combining several feature files
+    	run_svm(get_parent(args[0])+"/svm_files/", get_parent(resource_path), 0);							//run svm 
+    	compute_scorer(get_parent(args[0]), resource_path);													//compute scorer scripts for test data
+    	writer(get_parent(args[0]));																		//run scorer scripts
+    	get_scores(get_parent(args[0])+"/result_files/", resource_path);									//get final scores
 		
     }
     /**
@@ -91,11 +91,11 @@ public class QAMain
 		dir.setReadable(true);
 		dir.setWritable(true);
     	try {
-    		ProcessBuilder builder = new ProcessBuilder("java","-cp",resource_path+"lib/liblinear-java-1.95.jar","de.bwaldvogel.liblinear.Train","-s",param+"",inp+"/train/SVM_train.txt");
+    		ProcessBuilder builder = new ProcessBuilder("java","-cp",resource_path+"/lib/liblinear-java-1.95.jar","de.bwaldvogel.liblinear.Train","-s",param+"",inp+"/train/SVM_train.txt");
     		builder.directory(new File(inp+"train/"));
     		Process p = builder.start();
     		p.waitFor();
-    		ProcessBuilder builder2 = new ProcessBuilder("java","-cp",resource_path+"lib/liblinear-java-1.95.jar","de.bwaldvogel.liblinear.Predict","-b","1",inp+"/test/SVM_test.txt", inp+"/train/SVM_train.txt.model", pathgp+"/result_files/out.txt");
+    		ProcessBuilder builder2 = new ProcessBuilder("java","-cp",resource_path+"/lib/liblinear-java-1.95.jar","de.bwaldvogel.liblinear.Predict","-b","1",inp+"/test/SVM_test.txt", inp+"/train/SVM_train.txt.model", pathgp+"/result_files/out.txt");
     		Process p2 = builder2.start();
     		p2.waitFor();
     	} catch (Exception e) {
