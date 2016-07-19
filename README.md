@@ -34,4 +34,6 @@ java -Xmx10g -jar QARank.jar [absolute-path-to-xml_files-folder] [absolute-path-
 ## Contents
 * [Introduction](https://github.com/tudarmstadt-lt/QASelection/blob/master/src/main/java/cqa/doc/Home.md)
 * [Features](https://github.com/tudarmstadt-lt/QASelection/blob/master/src/main/java/cqa/doc/Features.md)
+* [File Format](https://github.com/tudarmstadt-lt/QASelection/blob/master/src/main/java/cqa/doc/file_format.md)
 * [Slides](https://github.com/tudarmstadt-lt/QASelection/releases/download/release1/conference_presentation.pdf)
+
