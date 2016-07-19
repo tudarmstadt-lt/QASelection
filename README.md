@@ -19,7 +19,7 @@ QARank is licensed under ASL 2.0 and other lenient licenses, allowing its use fo
 * The unannotated data can be downloaded from [here](http://alt.qcri.org/semeval2016/task3/data/uploads/QL-unannotated-data-subtaskA.xml.zip).
  * After unzipping the this folder, move to `QL-unannotated-data-subtaskA.xml/QL-unannotated-data-subtaskA.xml` and copy this file to *xml_files* directory and rename it **unannotated.xml**.
  * This file is large and requires a lot of memory to train models. To avoid larger training time, one can use training data for the same task. Make sure to rename the file to **unannotated.xml**.
- * Download the *python scripts* required to run the system from [here](https://github.com/tudarmstadt-lt/QASelection/releases/download/release1/resources.zip).
+* Download the *python scripts* required to run the system from [here](https://github.com/tudarmstadt-lt/QASelection/releases/download/release1/resources.zip).
 
 ## Running QARank
 * Run QARank jar as
