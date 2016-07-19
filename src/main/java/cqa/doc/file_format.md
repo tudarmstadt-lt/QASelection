@@ -1,3 +1,5 @@
+## File Format
+
 The format of training and testing SVM data file is:
 ```
 <label> <index1>:<value1> <index2>:<value2> ...
