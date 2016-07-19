@@ -7,7 +7,7 @@ QARank is licensed under ASL 2.0 and other lenient licenses, allowing its use fo
 
 ## Downloading Data
 * QARank requires a training file, a test file and unannotated data to train models.
-* The system was trained and tested on **SemEval 2016 - Task 3: Community Question Answering - Subtask A** data.
+* The system was trained and tested on **[SemEval 2016 - Task 3: Community Question Answering](http://alt.qcri.org/semeval2016/task3/) - Subtask A** data.
 * Create a directory named **xml_files** in your local machine.
 * The training+dev data can be downloaded from [here](http://alt.qcri.org/semeval2016/task3/data/uploads/semeval2016-task3-cqa-ql-traindev-v3.2.zip).
 * The original test data can be downloaded from
