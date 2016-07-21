@@ -21,7 +21,7 @@ QARank is licensed under ASL 2.0 and other lenient licenses, allowing its use fo
  * This file is large and requires a lot of memory to train models. To avoid larger training time, one can use training data for the same task. Make sure to rename the file to **unannotated.xml**.
 * Download the *python scripts* required to run the system from [here](https://github.com/tudarmstadt-lt/QASelection/releases/download/release1/resources.zip).
   * Unzip this `resources` folder in a suitable place.
-* The trained word embeddings on the large unannotated data can be found [here](https://github.com/tudarmstadt-lt/QASelection/releases/download/release1/vectors_unannotated.txt)
+* The trained word embeddings on the large unannotated data can be found [here](https://github.com/tudarmstadt-lt/QASelection/releases/download/release1/vectors_unannotated.txt).
 
 ## Running QARank
 * Run QARank jar as
